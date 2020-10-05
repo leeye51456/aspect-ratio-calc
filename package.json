@@ -17,8 +17,14 @@
     "typescript": "~3.7.2"
   },
   "scripts": {
+    "twb": "node scripts/tailwindcss-build",
+    "twc": "node scripts/tailwindcss-clean",
+    "twcb": "yarn run twc && yarn run twb",
+    "prestart": "yarn run twcb",
     "start": "react-scripts start",
+    "prebuild": "yarn run twcb",
     "build": "react-scripts build",
+    "pretest": "yarn run twcb",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
@@ -38,6 +44,7 @@
     ]
   },
   "devDependencies": {
+    "glob": "^7.1.6",
     "stylelint": "^13.7.2",
     "stylelint-config-standard": "^20.0.0"
   }
