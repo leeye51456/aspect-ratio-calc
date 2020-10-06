@@ -1,0 +1,57 @@
+@tailwind base;
+
+@tailwind components;
+
+@tailwind utilities;
+
+.ScreenForm {
+  @apply relative;
+  @apply my-4;
+  @apply w-full; /* Default width */
+}
+
+.ScreenForm-ratio {
+  @apply pb-9/16;
+}
+
+.ScreenForm-content {
+  @apply absolute;
+  @apply inset-0;
+  @apply pb-9/16; /* Default height */
+
+  @apply bg-yellow-600; /* For testing */
+}
+
+.ScreenForm-grid {
+  @apply absolute;
+  @apply inset-0;
+  @apply grid grid-rows-3 grid-cols-3;
+  @apply place-content-stretch place-items-stretch;
+}
+
+.ScreenForm-grid-item {
+  @apply grid grid-rows-3 grid-cols-3;
+  @apply place-self-stretch;
+}
+
+.ScreenForm-bg {
+  @apply absolute;
+  @apply inset-0;
+}
+
+.ScreenForm-width {
+  @apply row-start-3 row-end-4 col-start-2 col-end-3;
+}
+
+.ScreenForm-height {
+  @apply row-start-2 row-end-3 col-start-3 col-end-4;
+}
+
+.ScreenForm-diagonal {
+  @apply row-start-2 row-end-3 col-start-2 col-end-3;
+}
+
+.ScreenForm-misc {
+  @apply absolute;
+  @apply inset-0;
+}
