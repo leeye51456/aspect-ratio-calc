@@ -17,7 +17,6 @@
 .ScreenForm-content {
   @apply absolute;
   @apply inset-0;
-  @apply pb-9/16; /* Default height */
 
   @apply bg-yellow-600; /* For testing */
 }
@@ -30,7 +29,6 @@
 }
 
 .ScreenForm-grid-item {
-  @apply grid grid-rows-3 grid-cols-3;
   @apply place-self-stretch;
 }
 
