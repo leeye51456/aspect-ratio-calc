@@ -43,7 +43,7 @@ function buildAll(fileNames) {
 
 function tailwindcssBuild() {
   let fileNames;
-  if (process.argv.length >= 3) {
+  if (process.argv.length < 3) {
     fileNames = [
       ...glob.sync('src/**/tailwind.css'),
       ...glob.sync('src/**/*.tailwind.css'),
