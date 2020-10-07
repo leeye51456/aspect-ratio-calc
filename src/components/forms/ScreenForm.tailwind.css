@@ -1,7 +1,6 @@
 @layer components {
   .ScreenForm {
     @apply relative;
-    @apply my-4;
     @apply w-full; /* Default width */
   }
 
