@@ -2,10 +2,11 @@
   .ScreenForm {
     @apply relative;
     @apply w-full; /* Default width */
+    @apply leading-tight;
   }
 
   .ScreenForm-ratio {
-    @apply pb-9/16;
+    @apply pb-9/16; /* Default padding-bottom */
   }
 
   .ScreenForm-content {
@@ -15,20 +16,44 @@
     @apply bg-yellow-600; /* For testing */
   }
 
+  .ScreenForm-bg {
+    @apply absolute;
+    @apply inset-0;
+  }
+
+  .ScreenForm-misc {
+    @apply absolute;
+    @apply inset-0;
+    @apply p-1;
+    @apply text-sm;
+  }
+
+  .ScreenForm-misc-pair span {
+    @apply inline-block;
+  }
+
+  .ScreenForm-misc-key {
+    @apply rounded;
+    @apply mt-px ml-px;
+    @apply px-1;
+    @apply bg-yellow-200; /* Temporary color */
+  }
+
+  .ScreenForm-misc-value {
+    @apply mr-2;
+  }
+
   .ScreenForm-grid {
     @apply absolute;
     @apply inset-0;
     @apply grid grid-rows-3 grid-cols-3;
     @apply place-content-stretch place-items-stretch;
+    @apply h-full;
   }
 
   .ScreenForm-grid-item {
-    @apply place-self-stretch;
-  }
-
-  .ScreenForm-bg {
-    @apply absolute;
-    @apply inset-0;
+    @apply place-self-center;
+    @apply text-center;
   }
 
   .ScreenForm-width {
@@ -36,15 +61,19 @@
   }
 
   .ScreenForm-height {
-    @apply row-start-2 row-end-3 col-start-3 col-end-4;
+    @apply row-start-2 row-end-4 col-start-3 col-end-4;
   }
 
   .ScreenForm-diagonal {
     @apply row-start-2 row-end-3 col-start-2 col-end-3;
   }
 
-  .ScreenForm-misc {
-    @apply absolute;
-    @apply inset-0;
+  .ScreenForm-grid-item > li {
+    @apply text-xs tracking-tight;
+  }
+
+  .ScreenForm-input {
+    @apply w-14;
+    @apply leading-snug text-base text-center;
   }
 }
