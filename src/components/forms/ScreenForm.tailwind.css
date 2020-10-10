@@ -12,8 +12,9 @@
   .ScreenForm-content {
     @apply absolute;
     @apply inset-0;
-
-    @apply bg-yellow-600; /* For testing */
+    @apply border border-gray-700;
+    @apply bg-gray-300;
+    @apply shadow-lg;
   }
 
   .ScreenForm-bg {
@@ -23,24 +24,29 @@
 
   .ScreenForm-misc {
     @apply absolute;
-    @apply inset-0;
+    @apply inset-0 bottom-auto;
     @apply p-1;
     @apply text-sm;
   }
 
-  .ScreenForm-misc-pair span {
+  .ScreenForm-misc-pairs span {
     @apply inline-block;
+  }
+
+  .ScreenForm-misc-pair {
+    @apply mb-px;
   }
 
   .ScreenForm-misc-key {
     @apply rounded;
     @apply mt-px ml-px;
-    @apply px-1;
-    @apply bg-yellow-200; /* Temporary color */
+    @apply pl-1;
+    @apply bg-teal-300;
+    @apply text-teal-900;
   }
 
   .ScreenForm-misc-value {
-    @apply mr-2;
+    @apply ml-1 mr-3;
   }
 
   .ScreenForm-grid {
@@ -73,6 +79,7 @@
   }
 
   .ScreenForm-input {
+    @apply border border-gray-600 rounded;
     @apply w-14;
     @apply leading-snug text-base text-center;
   }
