@@ -32,6 +32,9 @@ module.exports = {
       spacing: {
         'defaultgap': `${contentGap}px`,
       },
+      width: {
+        '14': '3.5rem',
+      },
     },
   },
   variants: {},
