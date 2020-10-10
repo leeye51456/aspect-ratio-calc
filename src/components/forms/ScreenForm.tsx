@@ -41,7 +41,8 @@ const insertCommas = function insertCommasIntoIneger(integer: number): string {
 };
 
 function ScreenForm(props: ScreenFormProps) {
-  const [ width, height, diagonal ] = [props.width, props.height, props.diagonal].map((value) => parseInt(value, 10));
+  const [ width, height ] = [props.width, props.height].map((value) => parseInt(value, 10));
+  const diagonal = parseFloat(props.diagonal);
   const isFormValid = !(isNaN(width) || isNaN(height) || isNaN(diagonal) || width <= 0 || height <= 0 || diagonal <= 0);
 
   const {
