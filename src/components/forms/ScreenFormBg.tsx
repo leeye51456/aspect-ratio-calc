@@ -151,8 +151,8 @@ function ScreenFormBg(props: ScreenFormBgProps) {
 
   return (
     <svg
-      width={props.width}
-      height={props.height}
+      viewBox={`0 0 ${props.width} ${props.height}`}
+      width="100%"
     >
       <line { ...widthArrowBodyAttrs } className="ScreenFormBg-svg-stroke" />
       <line { ...heightArrowBodyAttrs } className="ScreenFormBg-svg-stroke" />
