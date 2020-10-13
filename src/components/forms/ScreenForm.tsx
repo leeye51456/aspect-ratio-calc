@@ -1,4 +1,5 @@
 import React from 'react';
+import ScreenFormBg from './ScreenFormBg';
 import { getScreenInfo, ScreenInfo } from '../../utils/getScreenInfo';
 import { getAspectRatioString } from '../../utils/getAspectRatioString';
 import './ScreenForm.css';
@@ -15,6 +16,8 @@ interface ScreenFormProps {
 }
 
 const defaultScreenInfo: ScreenInfo = getScreenInfo(1920, 1080, 24);
+
+const maxWidth: number = 360;
 
 const getContainerStyle = function getContainerStyleByRatio(ratio: number): { width: string } {
   if (ratio < 9 / 22) {
@@ -36,14 +39,36 @@ const getRatioStyle = function getRatioStyleByRatio(ratio: number): { paddingBot
   }
 };
 
+const getFormWidth = function getFormWidthByPixels(ratio: number): number {
+  if (ratio < 9 / 22) {
+    return maxWidth * 9 / 22; // ratio < 9:22
+  } else if (ratio < 1) {
+    return maxWidth * ratio; // 9:22 <= ratio < 1
+  } else {
+    return maxWidth; // ratio >= 1
+  }
+};
+
+const getFormHeight = function getFormHeightByPixels(ratio: number): number {
+  if (ratio > 22 / 9) {
+    return maxWidth * 9 / 22; // ratio > 22:9
+  } else if (ratio <= 1) {
+    return maxWidth; // ratio <= 1
+  } else {
+    return maxWidth / ratio; // 1 < ratio <= 22:9
+  }
+};
+
 const insertCommas = function insertCommasIntoIneger(integer: number): string {
   return integer.toFixed().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
 };
 
 function ScreenForm(props: ScreenFormProps) {
-  const [ width, height ] = [props.width, props.height].map((value) => parseInt(value, 10));
-  const diagonal = parseFloat(props.diagonal);
-  const isFormValid = !(isNaN(width) || isNaN(height) || isNaN(diagonal) || width <= 0 || height <= 0 || diagonal <= 0);
+  const [ width, height ]: number[] = [props.width, props.height].map((value) => parseInt(value, 10));
+  const diagonal: number = parseFloat(props.diagonal);
+  const isFormValid: boolean = !(
+    isNaN(width) || isNaN(height) || isNaN(diagonal) || width <= 0 || height <= 0 || diagonal <= 0
+  );
 
   const {
     ratio,
@@ -75,7 +100,7 @@ function ScreenForm(props: ScreenFormProps) {
 
       <div className="ScreenForm-content">
         <div className="ScreenForm-bg">
-          {/* Background graphic with size arrows */}
+          <ScreenFormBg width={getFormWidth(ratio)} height={getFormHeight(ratio)} />
         </div>
 
         <div className="ScreenForm-grid">

@@ -12,7 +12,6 @@
   .ScreenForm-content {
     @apply absolute;
     @apply inset-0;
-    @apply border border-gray-700;
     @apply bg-gray-300;
     @apply shadow-lg;
   }
