@@ -139,7 +139,7 @@ const getDiagonalArrowTips = function getTipsOfDiagonalArrow(width: number, heig
 
 
 function ScreenFormBg(props: ScreenFormBgProps) {
-  const { width, height }: { width: number, height: number } = props;
+  const { width, height }: ScreenFormBgProps = props;
 
   const widthArrowBodyAttrs: SvgLineXy = getWidthArrowBodyAttrs(width, height);
   const heightArrowBodyAttrs: SvgLineXy = getTransposedSvgLineAttrs(getWidthArrowBodyAttrs(height, width));
