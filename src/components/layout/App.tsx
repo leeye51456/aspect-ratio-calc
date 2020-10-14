@@ -14,17 +14,11 @@ interface ScreenFormData {
   [id: number]: ScreenFormProps,
 }
 
-interface IndexById {
-  [id: number]: number,
-}
-
 interface AddNewScreenFormParam {
   screenData: ScreenFormData,
   setScreenData: ReactSetState<ScreenFormData>,
   screenIdOrder: number[],
   setScreenIdOrder: ReactSetState<number[]>,
-  indexById: IndexById,
-  setIndexById: ReactSetState<IndexById>,
   nextId: number,
   setNextId: ReactSetState<number>,
 }
@@ -35,8 +29,6 @@ const addNewScreenForm = function addNewScreenFormToApp(
     setScreenData,
     screenIdOrder,
     setScreenIdOrder,
-    indexById,
-    setIndexById,
     nextId,
     setNextId,
   }: AddNewScreenFormParam
@@ -54,9 +46,6 @@ const addNewScreenForm = function addNewScreenFormToApp(
   const nextScreenData: ScreenFormData = { ...screenData, [id]: newScreenFormProps };
   setScreenData(nextScreenData);
 
-  const nextIndexById: IndexById = { ...indexById, [id]: screenIdOrder.length };
-  setIndexById(nextIndexById);
-
   const nextScreenIdOrder: number[] = [ ...screenIdOrder, id ];
   setScreenIdOrder(nextScreenIdOrder);
 };
@@ -64,27 +53,41 @@ const addNewScreenForm = function addNewScreenFormToApp(
 function App() {
   const [ screenData, setScreenData ] = useState<ScreenFormData>({});
   const [ screenIdOrder, setScreenIdOrder ] = useState<number[]>([]);
-  const [ indexById, setIndexById ] = useState<IndexById>({});
   const [ nextId, setNextId ] = useState(0);
 
   const handleAddClick = function handleAddNewScreenFormClick(): void {
     addNewScreenForm(
-      { screenData, setScreenData, screenIdOrder, setScreenIdOrder, indexById, setIndexById, nextId, setNextId }
+      { screenData, setScreenData, screenIdOrder, setScreenIdOrder, nextId, setNextId }
     );
   };
 
-  const screenForms = screenIdOrder.map((id) => {
-    const onChange = function handleScreenFormChange(
-      id: number,
-      propName: ScreenFormPropName,
-      propValue: string,
-    ): void {
-      const nextScreenFormProps: ScreenFormProps = { ...screenData[id], [propName]: propValue };
-      const nextScreenData: ScreenFormData = { ...screenData, [id]: nextScreenFormProps };
-      setScreenData(nextScreenData);
-    };
-    return <ScreenForm { ...screenData[id] } onChange={onChange} key={id} />;
-  });
+  const handleScreenFormChange = function handleScreenFormChangeById(
+    id: number,
+    propName: ScreenFormPropName,
+    propValue: string,
+  ): void {
+    const nextScreenFormProps: ScreenFormProps = { ...screenData[id], [propName]: propValue };
+    const nextScreenData: ScreenFormData = { ...screenData, [id]: nextScreenFormProps };
+    setScreenData(nextScreenData);
+  };
+
+  const handleScreenFormRemove = function handleScreenFormRemoveById(id: number): void {
+    const nextScreenData: ScreenFormData = { ...screenData };
+    delete nextScreenData[id];
+    setScreenData(nextScreenData);
+
+    const nextScreenIdOrder: number[] = screenIdOrder.filter((value) => value !== id);
+    setScreenIdOrder(nextScreenIdOrder);
+  };
+
+  const screenForms = screenIdOrder.map((id) => (
+    <ScreenForm
+      { ...screenData[id] }
+      key={id}
+      onChange={handleScreenFormChange}
+      onRemove={handleScreenFormRemove}
+    />
+  ));
 
   return (
     <div className="App" data-testid="App">
