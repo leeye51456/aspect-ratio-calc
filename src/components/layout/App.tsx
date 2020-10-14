@@ -14,17 +14,11 @@ interface ScreenFormData {
   [id: number]: ScreenFormProps,
 }
 
-interface IndexById {
-  [id: number]: number,
-}
-
 interface AddNewScreenFormParam {
   screenData: ScreenFormData,
   setScreenData: ReactSetState<ScreenFormData>,
   screenIdOrder: number[],
   setScreenIdOrder: ReactSetState<number[]>,
-  indexById: IndexById,
-  setIndexById: ReactSetState<IndexById>,
   nextId: number,
   setNextId: ReactSetState<number>,
 }
@@ -35,8 +29,6 @@ const addNewScreenForm = function addNewScreenFormToApp(
     setScreenData,
     screenIdOrder,
     setScreenIdOrder,
-    indexById,
-    setIndexById,
     nextId,
     setNextId,
   }: AddNewScreenFormParam
@@ -54,9 +46,6 @@ const addNewScreenForm = function addNewScreenFormToApp(
   const nextScreenData: ScreenFormData = { ...screenData, [id]: newScreenFormProps };
   setScreenData(nextScreenData);
 
-  const nextIndexById: IndexById = { ...indexById, [id]: screenIdOrder.length };
-  setIndexById(nextIndexById);
-
   const nextScreenIdOrder: number[] = [ ...screenIdOrder, id ];
   setScreenIdOrder(nextScreenIdOrder);
 };
@@ -64,12 +53,11 @@ const addNewScreenForm = function addNewScreenFormToApp(
 function App() {
   const [ screenData, setScreenData ] = useState<ScreenFormData>({});
   const [ screenIdOrder, setScreenIdOrder ] = useState<number[]>([]);
-  const [ indexById, setIndexById ] = useState<IndexById>({});
   const [ nextId, setNextId ] = useState(0);
 
   const handleAddClick = function handleAddNewScreenFormClick(): void {
     addNewScreenForm(
-      { screenData, setScreenData, screenIdOrder, setScreenIdOrder, indexById, setIndexById, nextId, setNextId }
+      { screenData, setScreenData, screenIdOrder, setScreenIdOrder, nextId, setNextId }
     );
   };
 
@@ -90,10 +78,6 @@ function App() {
 
     const nextScreenIdOrder: number[] = screenIdOrder.filter((value) => value !== id);
     setScreenIdOrder(nextScreenIdOrder);
-
-    const nextIndexById: IndexById = { ...indexById };
-    delete nextIndexById[id];
-    setIndexById(nextIndexById);
   };
 
   const screenForms = screenIdOrder.map((id) => (
