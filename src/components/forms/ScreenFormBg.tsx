@@ -137,7 +137,6 @@ const getDiagonalArrowTips = function getTipsOfDiagonalArrow(width: number, heig
   ]
 };
 
-
 function ScreenFormBg(props: ScreenFormBgProps) {
   const { width, height }: ScreenFormBgProps = props;
 
