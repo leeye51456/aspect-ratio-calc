@@ -73,18 +73,23 @@ function App() {
     );
   };
 
-  const screenForms = screenIdOrder.map((id) => {
-    const onChange = function handleScreenFormChange(
-      id: number,
-      propName: ScreenFormPropName,
-      propValue: string,
-    ): void {
-      const nextScreenFormProps: ScreenFormProps = { ...screenData[id], [propName]: propValue };
-      const nextScreenData: ScreenFormData = { ...screenData, [id]: nextScreenFormProps };
-      setScreenData(nextScreenData);
-    };
-    return <ScreenForm { ...screenData[id] } onChange={onChange} key={id} />;
-  });
+  const handleScreenFormChange = function handleScreenFormChangeById(
+    id: number,
+    propName: ScreenFormPropName,
+    propValue: string,
+  ): void {
+    const nextScreenFormProps: ScreenFormProps = { ...screenData[id], [propName]: propValue };
+    const nextScreenData: ScreenFormData = { ...screenData, [id]: nextScreenFormProps };
+    setScreenData(nextScreenData);
+  };
+
+  const screenForms = screenIdOrder.map((id) => (
+    <ScreenForm
+      { ...screenData[id] }
+      key={id}
+      onChange={handleScreenFormChange}
+    />
+  ));
 
   return (
     <div className="App" data-testid="App">
