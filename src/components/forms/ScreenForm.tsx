@@ -86,13 +86,13 @@ function ScreenForm(props: ScreenFormProps) {
   const containerStyle: { width: string } = getContainerStyle(ratio);
   const ratioStyle: { paddingBottom: string } = getRatioStyle(ratio);
 
-  const handleInputChangeWith = (prop: ScreenFormPropName) => (
-    (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleInputChangeWith = function getInputChangeHandlerByProp(prop: ScreenFormPropName) {
+    return function handleInputChange(event: React.ChangeEvent<HTMLInputElement>): void {
       props.onChange(props.id, prop, event.target.value);
-    }
-  );
+    };
+  };
 
-  const handleInputBlur = () => {
+  const handleInputBlur = function checkInputsAndRemove(): void {
     const isWidthEmpty = widthInputRef.current?.value === '';
     const isHeightEmpty = heightInputRef.current?.value === '';
     const isDiagonalEmpty = diagonalInputRef.current?.value === '';
