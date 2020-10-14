@@ -83,11 +83,25 @@ function App() {
     setScreenData(nextScreenData);
   };
 
+  const handleScreenFormRemove = function handleScreenFormRemoveById(id: number): void {
+    const nextScreenData: ScreenFormData = { ...screenData };
+    delete nextScreenData[id];
+    setScreenData(nextScreenData);
+
+    const nextScreenIdOrder: number[] = screenIdOrder.filter((value) => value !== id);
+    setScreenIdOrder(nextScreenIdOrder);
+
+    const nextIndexById: IndexById = { ...indexById };
+    delete nextIndexById[id];
+    setIndexById(nextIndexById);
+  };
+
   const screenForms = screenIdOrder.map((id) => (
     <ScreenForm
       { ...screenData[id] }
       key={id}
       onChange={handleScreenFormChange}
+      onRemove={handleScreenFormRemove}
     />
   ));
 

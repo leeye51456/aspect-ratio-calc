@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import ScreenFormBg from './ScreenFormBg';
 import { getScreenInfo, ScreenInfo } from '../../utils/getScreenInfo';
 import { getAspectRatioString } from '../../utils/getAspectRatioString';
@@ -13,6 +13,7 @@ interface ScreenFormProps {
   height: string,
   diagonal: string,
   onChange: (id: number, propName: ScreenFormPropName, propValue: string) => void,
+  onRemove: (id: number) => void,
 }
 
 const defaultScreenInfo: ScreenInfo = getScreenInfo(1920, 1080, 24);
@@ -64,6 +65,10 @@ const insertCommas = function insertCommasIntoIneger(integer: number): string {
 };
 
 function ScreenForm(props: ScreenFormProps) {
+  const widthInputRef = useRef<HTMLInputElement>(null);
+  const heightInputRef = useRef<HTMLInputElement>(null);
+  const diagonalInputRef = useRef<HTMLInputElement>(null);
+
   const [ width, height ]: number[] = [props.width, props.height].map((value) => parseInt(value, 10));
   const diagonal: number = parseFloat(props.diagonal);
   const isFormValid: boolean = !(
@@ -87,6 +92,15 @@ function ScreenForm(props: ScreenFormProps) {
     }
   );
 
+  const handleInputBlur = () => {
+    const isWidthEmpty = widthInputRef.current?.value === '';
+    const isHeightEmpty = heightInputRef.current?.value === '';
+    const isDiagonalEmpty = diagonalInputRef.current?.value === '';
+    if (isWidthEmpty && isHeightEmpty && isDiagonalEmpty) {
+      props.onRemove(props.id);
+    }
+  };
+
   return (
     <div
       data-testid="ScreenForm"
@@ -107,12 +121,14 @@ function ScreenForm(props: ScreenFormProps) {
           <ul className="ScreenForm-grid-item ScreenForm-width">
             <li>
               <input
+                ref={widthInputRef}
                 className="ScreenForm-input"
                 type="text"
                 value={props.width}
                 inputMode="numeric"
                 title="Width"
                 onChange={handleInputChangeWith('width')}
+                onBlur={handleInputBlur}
               />&nbsp;px
             </li>
             <li>
@@ -122,12 +138,14 @@ function ScreenForm(props: ScreenFormProps) {
           <ul className="ScreenForm-grid-item ScreenForm-height">
             <li>
               <input
+                ref={heightInputRef}
                 className="ScreenForm-input"
                 type="text"
                 value={props.height}
                 inputMode="numeric"
                 title="Height"
                 onChange={handleInputChangeWith('height')}
+                onBlur={handleInputBlur}
               />&nbsp;px
             </li>
             <li>
@@ -137,12 +155,14 @@ function ScreenForm(props: ScreenFormProps) {
           <ul className="ScreenForm-grid-item ScreenForm-diagonal">
             <li>
               <input
+                ref={diagonalInputRef}
                 className="ScreenForm-input"
                 type="text"
                 value={props.diagonal}
                 inputMode="decimal"
                 title="Diagonal"
                 onChange={handleInputChangeWith('diagonal')}
+                onBlur={handleInputBlur}
               />&nbsp;in
             </li>
           </ul>
