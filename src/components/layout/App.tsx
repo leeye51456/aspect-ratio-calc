@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import getAspectRatioString from '../../utils/getAspectRatioString';
+import getScreenInfo, { ScreenInfo } from '../../utils/getScreenInfo';
 import ReactSetState from '../../utils/ReactSetState';
 import ScreenForm, { ScreenFormPropName } from '../forms/ScreenForm';
 import './App.css';
@@ -22,6 +24,32 @@ interface AddNewScreenFormParam {
   nextId: number,
   setNextId: ReactSetState<number>,
 }
+
+const buildScreenInfoYaml = function buildYamlFromScreenInfo(screenInfo: ScreenInfo): string {
+  const { pixelCount, diagonal, ratio, dpi, dotPitch, size }: ScreenInfo = screenInfo;
+  return '- ' + [
+    `Screen: ${pixelCount.width} x ${pixelCount.height}`,
+    `Diagonal: ${diagonal}"`,
+    `AspectRatio: ${ratio.toFixed(2)}:1 (${getAspectRatioString(ratio)})`,
+    `DPI: ${dpi.toFixed(2)}`,
+    `DotPitch: ${dotPitch.toFixed(4)}`,
+    `Size: ${size.width.toFixed(2)} cm x ${size.height.toFixed(2)} cm`,
+    `PixelCount: ${pixelCount.total}`,
+  ].join('\n  ');
+};
+
+const getWholeYaml = function getWholeYamlFromScreenFormData(screenFormData: ScreenFormProps[]): string {
+  const screens: ScreenInfo[] = screenFormData.reduce<ScreenInfo[]>((acc: ScreenInfo[], props: ScreenFormProps) => {
+    const [ width, height ]: number[] = [props.width, props.height].map((value) => parseInt(value, 10));
+    const diagonal: number = parseFloat(props.diagonal);
+    if (!(isNaN(width) || isNaN(height) || isNaN(diagonal) || width <= 0 || height <= 0 || diagonal <= 0)) {
+      acc.push(getScreenInfo(width, height, diagonal));
+    }
+    return acc;
+  }, []);
+  const yamls: string[] = screens.map((screen) => buildScreenInfoYaml(screen));
+  return yamls.join('\n\n') + '\n';
+};
 
 const addNewScreenForm = function addNewScreenFormToApp(
   {
