@@ -5,13 +5,25 @@
 
   .App-header {
     @apply row-start-1 col-start-2;
+    @apply flex flex-no-wrap justify-between;
     @apply mx-defaultgap;
     @apply border-b border-gray-400;
-    @apply px-3 py-2;
+    @apply px-2 py-2;
   }
 
   .App-header-title {
     @apply text-xl font-bold;
+  }
+
+  .App-header-button-container {
+    @apply flex-grow-0;
+  }
+
+  .App-header-button {
+    @apply ml-1;
+    @apply rounded;
+    @apply h-full;
+    @apply bg-teal-200;
   }
 
   .App-main {
