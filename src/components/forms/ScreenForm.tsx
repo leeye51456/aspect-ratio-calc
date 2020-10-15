@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 import ScreenFormBg from './ScreenFormBg';
 import { getScreenInfo, ScreenInfo } from '../../utils/getScreenInfo';
 import { getAspectRatioString } from '../../utils/getAspectRatioString';
@@ -100,6 +100,10 @@ function ScreenForm(props: ScreenFormProps) {
       props.onRemove(props.id);
     }
   };
+
+  useEffect(() => {
+    widthInputRef.current?.focus();
+  }, []);
 
   return (
     <div
