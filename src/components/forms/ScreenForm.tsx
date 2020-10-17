@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 import ScreenFormBg from './ScreenFormBg';
-import { getScreenInfo, ScreenInfo } from '../../utils/getScreenInfo';
+import { getScreenInfo, ScreenInfo } from '../../utils/ScreenInfo';
 import { getAspectRatioString } from '../../utils/getAspectRatioString';
 import './ScreenForm.css';
 

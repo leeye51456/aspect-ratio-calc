@@ -1,4 +1,4 @@
-import { ScreenInfo, getScreenInfo } from './getScreenInfo';
+import { ScreenInfo, getScreenInfo } from './ScreenInfo';
 
 test('utils/getScreenInfo: Invalid parameter', () => {
   const passZeroWidth: ScreenInfo | null = getScreenInfo(0, 1, 1);

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import getAspectRatioString from '../../utils/getAspectRatioString';
-import getScreenInfo, { ScreenInfo } from '../../utils/getScreenInfo';
+import { getScreenInfo, ScreenInfo } from '../../utils/ScreenInfo';
 import ReactSetState from '../../utils/ReactSetState';
 import ScreenForm, { ScreenFormPropName } from '../forms/ScreenForm';
 import './App.css';

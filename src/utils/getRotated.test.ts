@@ -1,5 +1,5 @@
 import getRotated from './getRotated';
-import { getScreenInfo, ScreenInfo } from './getScreenInfo';
+import { getScreenInfo, ScreenInfo } from './ScreenInfo';
 
 const testGetRotated = function testGetRotatedFunctionWith(screenInfo: ScreenInfo): void {
   const original: ScreenInfo = {
