@@ -53,5 +53,3 @@ export const getScreenInfo = function getScreenInfoFrom(
 
   return { pixelCount, ratio, dpi, dotPitch, size, diagonal: floatDiagonal };
 };
-
-export default getScreenInfo;
