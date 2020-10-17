@@ -1,4 +1,4 @@
-import { PixelCount, RectSize, ScreenInfo } from './getScreenInfo';
+import { PixelCount, RectSize, ScreenInfo } from './ScreenInfo';
 
 export const getRotated = function getRotatedScreenInfo(screenInfo: ScreenInfo): ScreenInfo {
   const pixelCount: PixelCount = {

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import getAspectRatioString from '../../utils/getAspectRatioString';
-import getScreenInfo, { ScreenInfo } from '../../utils/getScreenInfo';
+import { getScreenInfo, ScreenInfo } from '../../utils/ScreenInfo';
 import ReactSetState from '../../utils/ReactSetState';
 import ScreenForm, { ScreenFormPropName } from '../forms/ScreenForm';
 import './App.css';
@@ -40,10 +40,10 @@ const buildScreenInfoYaml = function buildYamlFromScreenInfo(screenInfo: ScreenI
 
 const getWholeYaml = function getWholeYamlFromScreenFormData(screenFormData: ScreenFormProps[]): string {
   const screens: ScreenInfo[] = screenFormData.reduce<ScreenInfo[]>((acc: ScreenInfo[], props: ScreenFormProps) => {
-    const [ width, height ]: number[] = [props.width, props.height].map((value) => parseInt(value, 10));
-    const diagonal: number = parseFloat(props.diagonal);
-    if (!(isNaN(width) || isNaN(height) || isNaN(diagonal) || width <= 0 || height <= 0 || diagonal <= 0)) {
-      acc.push(getScreenInfo(width, height, diagonal));
+    const { width, height, diagonal }: ScreenFormProps = props;
+    const screenInfo: ScreenInfo | null = getScreenInfo(width, height, diagonal);
+    if (screenInfo !== null) {
+      acc.push(screenInfo);
     }
     return acc;
   }, []);
