@@ -24,20 +24,20 @@ const testGetRotated = function testGetRotatedFunctionWith(screenInfo: ScreenInf
 
 test('utils/getRotated: Rotated screen', () => {
   const screenInfos: ScreenInfo[] = [
-    getScreenInfo(1366, 768, 15.6),
-    getScreenInfo(1080, 1920, 5.5),
-    getScreenInfo(2560, 1440, 32),
-    getScreenInfo(3840, 2160, 43),
-    getScreenInfo(5120, 2880, 27),
-    getScreenInfo(3000, 2000, 13.5),
-    getScreenInfo(2048, 1536, 9.7),
-    getScreenInfo(1280, 1024, 19),
-    getScreenInfo(2880, 1800, 15.4),
-    getScreenInfo(2960, 1440, 5.8),
-    getScreenInfo(3040, 1440, 6.1),
-    getScreenInfo(2436, 1125, 5.8),
-    getScreenInfo(3200, 1440, 6.2),
-    getScreenInfo(2560, 1080, 25),
+    getScreenInfo(1366, 768, 15.6) as ScreenInfo,
+    getScreenInfo(1080, 1920, 5.5) as ScreenInfo,
+    getScreenInfo(2560, 1440, 32) as ScreenInfo,
+    getScreenInfo(3840, 2160, 43) as ScreenInfo,
+    getScreenInfo(5120, 2880, 27) as ScreenInfo,
+    getScreenInfo(3000, 2000, 13.5) as ScreenInfo,
+    getScreenInfo(2048, 1536, 9.7) as ScreenInfo,
+    getScreenInfo(1280, 1024, 19) as ScreenInfo,
+    getScreenInfo(2880, 1800, 15.4) as ScreenInfo,
+    getScreenInfo(2960, 1440, 5.8) as ScreenInfo,
+    getScreenInfo(3040, 1440, 6.1) as ScreenInfo,
+    getScreenInfo(2436, 1125, 5.8) as ScreenInfo,
+    getScreenInfo(3200, 1440, 6.2) as ScreenInfo,
+    getScreenInfo(2560, 1080, 25) as ScreenInfo,
   ];
   for (const screenInfo of screenInfos) {
     testGetRotated(screenInfo);

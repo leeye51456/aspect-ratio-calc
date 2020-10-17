@@ -16,7 +16,7 @@ interface ScreenFormProps {
   onRemove: (id: number) => void,
 }
 
-const defaultScreenInfo: ScreenInfo = getScreenInfo(1920, 1080, 24);
+const defaultScreenInfo: ScreenInfo = getScreenInfo(1920, 1080, 24) as ScreenInfo;
 
 const maxWidth: number = 360;
 
@@ -69,19 +69,15 @@ function ScreenForm(props: ScreenFormProps) {
   const heightInputRef = useRef<HTMLInputElement>(null);
   const diagonalInputRef = useRef<HTMLInputElement>(null);
 
-  const [ width, height ]: number[] = [props.width, props.height].map((value) => parseInt(value, 10));
-  const diagonal: number = parseFloat(props.diagonal);
-  const isFormValid: boolean = !(
-    isNaN(width) || isNaN(height) || isNaN(diagonal) || width <= 0 || height <= 0 || diagonal <= 0
-  );
-
+  const { width, height, diagonal }: ScreenFormProps = props;
+  const screenInfo: ScreenInfo | null = getScreenInfo(width, height, diagonal);
   const {
     ratio,
     dpi,
     dotPitch,
-    pixelCount: { total: totalPixels },
     size,
-  }: ScreenInfo = isFormValid ? getScreenInfo(width, height, diagonal) : defaultScreenInfo;
+    pixelCount: { total: totalPixels },
+  }: ScreenInfo = screenInfo || defaultScreenInfo;
 
   const containerStyle: { width: string } = getContainerStyle(ratio);
   const ratioStyle: { paddingBottom: string } = getRatioStyle(ratio);
@@ -136,7 +132,7 @@ function ScreenForm(props: ScreenFormProps) {
               />&nbsp;px
             </li>
             <li>
-              {isFormValid ? `${size.width.toFixed(2)}cm` : '-'}
+              {screenInfo ? `${size.width.toFixed(2)}cm` : '-'}
             </li>
           </ul>
           <ul className="ScreenForm-grid-item ScreenForm-height">
@@ -153,7 +149,7 @@ function ScreenForm(props: ScreenFormProps) {
               />&nbsp;px
             </li>
             <li>
-              {isFormValid ? `${size.height.toFixed(2)}cm` : '-'}
+              {screenInfo ? `${size.height.toFixed(2)}cm` : '-'}
             </li>
           </ul>
           <ul className="ScreenForm-grid-item ScreenForm-diagonal">

@@ -21,31 +21,37 @@ export interface ScreenInfo {
 const INCH_TO_CENTIMETER_FACTOR: number = 2.54;
 
 export const getScreenInfo = function getScreenInfoFrom(
-  width: number,
-  height: number,
-  diagonal: number,
-) : ScreenInfo {
-  if (width <= 0 || height <= 0 || diagonal <= 0) {
-    throw new RangeError('Parameters should be positive numbers.');
+  width: number | string,
+  height: number | string,
+  diagonal: number | string,
+) : ScreenInfo | null {
+  const integerWidth: number = typeof width === 'number' ? Math.floor(width) : parseInt(width, 10);
+  const integerHeight: number = typeof height === 'number' ? Math.floor(height) : parseInt(height, 10);
+  const floatDiagonal: number = typeof diagonal === 'number' ? diagonal : parseFloat(diagonal);
+  if ([integerWidth, integerHeight, floatDiagonal].some(isNaN)) {
+    return null;
   }
-  if (!Number.isSafeInteger(width) || !Number.isSafeInteger(height)) {
-    throw new RangeError('`width` and `height` should be safe integers.');
+  if ([integerWidth, integerHeight, floatDiagonal].some((value) => value <= 0)) {
+    return null;
+  }
+  if (![integerWidth, integerHeight].every(Number.isSafeInteger)) {
+    return null;
   }
 
   const pixelCount: PixelCount = {
-    width,
-    height,
-    total: width * height,
+    width: integerWidth,
+    height: integerHeight,
+    total: integerWidth * integerHeight,
   };
-  const ratio: number = width / height;
-  const dpi: number = Math.sqrt(width ** 2 + height ** 2) / diagonal;
+  const ratio: number = integerWidth / integerHeight;
+  const dpi: number = Math.sqrt(integerWidth ** 2 + integerHeight ** 2) / floatDiagonal;
   const dotPitch: number = 10 * INCH_TO_CENTIMETER_FACTOR / dpi;
   const size: RectSize = {
-    width: width * dotPitch / 10,
-    height: height * dotPitch / 10,
+    width: integerWidth * dotPitch / 10,
+    height: integerHeight * dotPitch / 10,
   };
 
-  return { pixelCount, ratio, diagonal, dpi, dotPitch, size };
+  return { pixelCount, ratio, dpi, dotPitch, size, diagonal: floatDiagonal };
 };
 
 export default getScreenInfo;
