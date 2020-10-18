@@ -24,18 +24,6 @@ test('components/layout/App: Click add button', () => {
 
   userEvent.click(addButton);
 
-  const widthInput: HTMLElement = renderedComponent.getByDisplayValue(/^1920$/);
-  const heightInput: HTMLElement = renderedComponent.getByDisplayValue(/^1080$/);
-  const diagonalInput: HTMLElement = renderedComponent.getByDisplayValue(/^24$/);
-  const aspectRatioText: HTMLElement = renderedComponent.getByText(/^aspect ratio$/i);
-  const dpiText: HTMLElement = renderedComponent.getByText(/^dpi$/i);
-  const dotPitchText: HTMLElement = renderedComponent.getByText(/^dot pitch$/i);
   const pixelCountText: HTMLElement = renderedComponent.getByText(/^pixel count$/i);
-  expect(widthInput.title).toMatch(/^width$/i);
-  expect(heightInput.title).toMatch(/^height$/i);
-  expect(diagonalInput.title).toMatch(/^diagonal$/i);
-  expect(aspectRatioText).toBeInTheDocument();
-  expect(dpiText).toBeInTheDocument();
-  expect(dotPitchText).toBeInTheDocument();
   expect(pixelCountText).toBeInTheDocument();
 });
