@@ -1,22 +1,12 @@
-import { PixelCount, RectSize, ScreenInfo } from './ScreenInfo';
+import { getScreenInfo, isScreenInfoWithDiagonal, ScreenInfo } from './ScreenInfo';
 
-export const getRotated = function getRotatedScreenInfo(screenInfo: ScreenInfo): ScreenInfo {
-  const pixelCount: PixelCount = {
-    width: screenInfo.pixelCount.height,
-    height: screenInfo.pixelCount.width,
-    total: screenInfo.pixelCount.total,
-  };
-
-  const size: RectSize = {
-    width: screenInfo.size.height,
-    height: screenInfo.size.width,
-  };
-
-  const ratio: number = 1 / screenInfo.ratio;
-
-  const rotated: ScreenInfo = { ...screenInfo, pixelCount, size, ratio };
-
-  return rotated;
+// TODO - Remove this function?
+export const getRotated = function getRotatedScreenInfo(screenInfo: ScreenInfo): ScreenInfo | null {
+  const { width, height }: { width: number, height: number } = screenInfo.pixelCount;
+  if (isScreenInfoWithDiagonal(screenInfo)) {
+    return getScreenInfo(height, width, screenInfo.diagonal);
+  }
+  return getScreenInfo(height, width);
 };
 
 export default getRotated;
