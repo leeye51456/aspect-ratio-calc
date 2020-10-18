@@ -1,12 +1,19 @@
 import React, { useEffect, useRef } from 'react';
 import ScreenFormBg from './ScreenFormBg';
-import { getScreenInfo, ScreenInfo } from '../../utils/ScreenInfo';
+import {
+  getScreenInfo,
+  isScreenInfoBase,
+  isScreenInfoWithDiagonal,
+  RectSize,
+  ScreenInfo,
+  ScreenInfoWithDiagonal
+} from '../../utils/ScreenInfo';
 import { getAspectRatioString } from '../../utils/getAspectRatioString';
 import './ScreenForm.css';
 
 export type ScreenFormPropName = 'width' | 'height' | 'diagonal';
 
-interface ScreenFormProps {
+export interface ScreenFormProps {
   children?: React.ReactNode,
   id: number,
   width: string,
@@ -14,9 +21,9 @@ interface ScreenFormProps {
   diagonal: string,
   onChange: (id: number, propName: ScreenFormPropName, propValue: string) => void,
   onRemove: (id: number) => void,
-}
+};
 
-const defaultScreenInfo: ScreenInfo = getScreenInfo(1920, 1080, 24) as ScreenInfo;
+const { ratio: defaultDisplayedRatio }: { ratio: number } = getScreenInfo(1920, 1080, 24) as ScreenInfoWithDiagonal;
 
 const maxWidth: number = 360;
 
@@ -71,16 +78,21 @@ function ScreenForm(props: ScreenFormProps) {
 
   const { width, height, diagonal }: ScreenFormProps = props;
   const screenInfo: ScreenInfo | null = getScreenInfo(width, height, diagonal);
-  const {
-    ratio,
-    dpi,
-    dotPitch,
-    size,
-    pixelCount: { total: totalPixels },
-  }: ScreenInfo = screenInfo || defaultScreenInfo;
 
-  const containerStyle: { width: string } = getContainerStyle(ratio);
-  const ratioStyle: { paddingBottom: string } = getRatioStyle(ratio);
+  let ratio: number | null = null;
+  let dpi: number | null = null;
+  let dotPitch: number | null = null;
+  let size: RectSize | null = null;
+  let totalPixels: number | null = null;
+  if (isScreenInfoWithDiagonal(screenInfo)) {
+    ({ ratio, dpi, dotPitch, size, pixelCount: { total: totalPixels } } = screenInfo);
+  } else if (isScreenInfoBase(screenInfo)) {
+    ({ ratio, pixelCount: { total: totalPixels } } = screenInfo);
+  }
+
+  const renderedRatio: number = ratio || defaultDisplayedRatio;
+  const containerStyle: { width: string } = getContainerStyle(renderedRatio);
+  const ratioStyle: { paddingBottom: string } = getRatioStyle(renderedRatio);
 
   const handleInputChangeWith = function getInputChangeHandlerByProp(prop: ScreenFormPropName) {
     return function handleInputChange(event: React.ChangeEvent<HTMLInputElement>): void {
@@ -114,7 +126,7 @@ function ScreenForm(props: ScreenFormProps) {
 
       <div className="ScreenForm-content">
         <div className="ScreenForm-bg">
-          <ScreenFormBg width={getFormWidth(ratio)} height={getFormHeight(ratio)} />
+          <ScreenFormBg width={getFormWidth(renderedRatio)} height={getFormHeight(renderedRatio)} />
         </div>
 
         <div className="ScreenForm-grid">
@@ -132,7 +144,7 @@ function ScreenForm(props: ScreenFormProps) {
               />&nbsp;px
             </li>
             <li>
-              {screenInfo ? `${size.width.toFixed(2)}cm` : '-'}
+              {size ? `${size.width.toFixed(2)}cm` : '-'}
             </li>
           </ul>
           <ul className="ScreenForm-grid-item ScreenForm-height">
@@ -149,7 +161,7 @@ function ScreenForm(props: ScreenFormProps) {
               />&nbsp;px
             </li>
             <li>
-              {screenInfo ? `${size.height.toFixed(2)}cm` : '-'}
+              {size ? `${size.height.toFixed(2)}cm` : '-'}
             </li>
           </ul>
           <ul className="ScreenForm-grid-item ScreenForm-diagonal">
@@ -176,7 +188,7 @@ function ScreenForm(props: ScreenFormProps) {
                   Aspect&nbsp;ratio&nbsp;
                 </span>
                 <span className="ScreenForm-misc-value">
-                  {ratio.toFixed(2)}:1&nbsp;({getAspectRatioString(ratio)})
+                  {ratio ? `${ratio.toFixed(2)}:1 (${getAspectRatioString(ratio)})` : '-'}
                 </span>
               </span>
             </li>
@@ -186,7 +198,7 @@ function ScreenForm(props: ScreenFormProps) {
                   DPI&nbsp;
                 </span>
                 <span className="ScreenForm-misc-value">
-                  {dpi.toFixed(2)}
+                  {dpi ? dpi.toFixed(2) : '-'}
                 </span>
               </span>
               {' '}
@@ -195,7 +207,7 @@ function ScreenForm(props: ScreenFormProps) {
                   Dot&nbsp;pitch&nbsp;
                 </span>
                 <span className="ScreenForm-misc-value">
-                  {dotPitch.toFixed(4)}mm
+                  {dotPitch ? `${dotPitch.toFixed(4)}mm` : '-'}
                 </span>
               </span>
             </li>
@@ -205,7 +217,7 @@ function ScreenForm(props: ScreenFormProps) {
                   Pixel&nbsp;count&nbsp;
                 </span>
                 <span className="ScreenForm-misc-value">
-                  {insertCommas(totalPixels)}
+                  {totalPixels ? insertCommas(totalPixels) : '-'}
                 </span>
               </span>
             </li>

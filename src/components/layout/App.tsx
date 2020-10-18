@@ -1,6 +1,12 @@
 import React, { useState } from 'react';
 import getAspectRatioString from '../../utils/getAspectRatioString';
-import { getScreenInfo, ScreenInfo } from '../../utils/ScreenInfo';
+import {
+  getScreenInfo,
+  isScreenInfoWithDiagonal,
+  ScreenInfo,
+  ScreenInfoBase,
+  ScreenInfoWithDiagonal
+} from '../../utils/ScreenInfo';
 import ReactSetState from '../../utils/ReactSetState';
 import ScreenForm, { ScreenFormPropName } from '../forms/ScreenForm';
 import './App.css';
@@ -25,29 +31,41 @@ interface AddNewScreenFormParam {
   setNextId: ReactSetState<number>,
 }
 
-const buildScreenInfoYaml = function buildYamlFromScreenInfo(screenInfo: ScreenInfo): string {
-  const { pixelCount, diagonal, ratio, dpi, dotPitch, size }: ScreenInfo = screenInfo;
-  return '- ' + [
-    `Screen: ${pixelCount.width} x ${pixelCount.height}`,
-    `Diagonal: ${diagonal}"`,
-    `AspectRatio: ${ratio.toFixed(2)}:1 (${getAspectRatioString(ratio)})`,
-    `DPI: ${dpi.toFixed(2)}`,
-    `DotPitch: ${dotPitch.toFixed(4)}`,
-    `Size: ${size.width.toFixed(2)} cm x ${size.height.toFixed(2)} cm`,
-    `PixelCount: ${pixelCount.total}`,
-  ].join('\n  ');
+const buildScreenInfoYaml = function buildYamlFromScreenInfo(screenInfo: ScreenInfoWithDiagonal | ScreenInfoBase): string {
+  if (isScreenInfoWithDiagonal(screenInfo)) {
+    const { pixelCount, diagonal, ratio, dpi, dotPitch, size }: ScreenInfoWithDiagonal = screenInfo;
+    return '- ' + [
+      `Screen: ${pixelCount.width} x ${pixelCount.height}`,
+      `Diagonal: ${diagonal}"`,
+      `AspectRatio: ${ratio.toFixed(2)}:1 (${getAspectRatioString(ratio)})`,
+      `DPI: ${dpi.toFixed(2)}`,
+      `DotPitch: ${dotPitch.toFixed(4)}`,
+      `Size: ${size.width.toFixed(2)} cm x ${size.height.toFixed(2)} cm`,
+      `PixelCount: ${pixelCount.total}`,
+    ].join('\n  ');
+  } else {
+    const { pixelCount, ratio }: ScreenInfoBase = screenInfo;
+    return '- ' + [
+      `Screen: ${pixelCount.width} x ${pixelCount.height}`,
+      `AspectRatio: ${ratio.toFixed(2)}:1 (${getAspectRatioString(ratio)})`,
+      `PixelCount: ${pixelCount.total}`,
+    ].join('\n  ');
+  }
 };
 
 const getWholeYaml = function getWholeYamlFromScreenFormData(screenFormData: ScreenFormProps[]): string {
-  const screens: ScreenInfo[] = screenFormData.reduce<ScreenInfo[]>((acc: ScreenInfo[], props: ScreenFormProps) => {
-    const { width, height, diagonal }: ScreenFormProps = props;
-    const screenInfo: ScreenInfo | null = getScreenInfo(width, height, diagonal);
-    if (screenInfo !== null) {
-      acc.push(screenInfo);
-    }
-    return acc;
-  }, []);
-  const yamls: string[] = screens.map((screen) => buildScreenInfoYaml(screen));
+  const screens: ScreenInfo[] = screenFormData.reduce<ScreenInfo[]>(
+    (acc: ScreenInfo[], props: ScreenFormProps) => {
+      const { width, height, diagonal }: ScreenFormProps = props;
+      const screenInfo: ScreenInfo | null = getScreenInfo(width, height, diagonal);
+      if (screenInfo !== null) {
+        acc.push(screenInfo);
+      }
+      return acc;
+    },
+    []
+  );
+  const yamls: string[] = screens.map((screen: ScreenInfo) => buildScreenInfoYaml(screen));
   return yamls.join('\n\n') + '\n';
 };
 
@@ -97,9 +115,9 @@ const addNewScreenForm = function addNewScreenFormToApp(
 
   const newScreenFormProps: ScreenFormProps = {
     id,
-    width: '1920',
-    height: '1080',
-    diagonal: '24',
+    width: '',
+    height: '',
+    diagonal: '',
   };
 
   const nextScreenData: ScreenFormData = { ...screenData, [id]: newScreenFormProps };
