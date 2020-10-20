@@ -41,16 +41,26 @@ function buildAll(fileNames) {
   return failedFiles;
 }
 
-function tailwindcssBuild() {
-  let fileNames;
-  if (process.argv.length < 3) {
-    fileNames = [
-      ...glob.sync('src/**/tailwind.css'),
-      ...glob.sync('src/**/*.tailwind.css'),
-    ];
-  } else {
-    [ , , ...fileNames ] = process.argv;
+function getFileNamesFromGlobPatterns(globPatterns) {
+  const fileNameArray = [];
+  const fileNameSet = new Set();
+
+  for (const globPattern of globPatterns) {
+    const fileNames = glob.sync(`src/**/${globPattern}{.,/**/*}tailwind.css`);
+    for (const fileName of fileNames) {
+      if (!fileNameSet.has(fileName)) {
+        fileNameArray.push(fileName);
+        fileNameSet.add(fileName);
+      }
+    }
   }
+
+  return fileNameArray;
+}
+
+function tailwindcssBuild() {
+  const globPatterns = process.argv.length < 3 ? [''] : process.argv.slice(2);
+  const fileNames = getFileNamesFromGlobPatterns(globPatterns);
 
   const failedFiles = buildAll(fileNames);
   if (failedFiles.length > 0) {
