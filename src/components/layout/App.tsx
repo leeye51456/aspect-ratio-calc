@@ -8,7 +8,7 @@ import {
   ScreenInfoWithDiagonal
 } from '../../utils/ScreenInfo';
 import ReactSetState from '../../utils/ReactSetState';
-import ScreenForm, { ScreenFormPropName } from '../forms/ScreenForm';
+import ScreenForm, { ScreenFormChangedProps } from '../forms/ScreenForm';
 import './App.css';
 
 interface ScreenFormProps {
@@ -144,10 +144,9 @@ function App() {
 
   const handleScreenFormChange = function handleScreenFormChangeById(
     id: number,
-    propName: ScreenFormPropName,
-    propValue: string,
+    changed: ScreenFormChangedProps,
   ): void {
-    const nextScreenFormProps: ScreenFormProps = { ...screenData[id], [propName]: propValue };
+    const nextScreenFormProps: ScreenFormProps = { ...screenData[id], ...changed };
     const nextScreenData: ScreenFormData = { ...screenData, [id]: nextScreenFormProps };
     setScreenData(nextScreenData);
   };

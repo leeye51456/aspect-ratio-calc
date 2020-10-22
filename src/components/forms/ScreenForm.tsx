@@ -13,13 +13,19 @@ import './ScreenForm.css';
 
 export type ScreenFormPropName = 'width' | 'height' | 'diagonal';
 
+export interface ScreenFormChangedProps {
+  width?: string,
+  height?: string,
+  diagonal?: string,
+};
+
 export interface ScreenFormProps {
   children?: React.ReactNode,
   id: number,
   width: string,
   height: string,
   diagonal: string,
-  onChange: (id: number, propName: ScreenFormPropName, propValue: string) => void,
+  onChange: (id: number, changed: ScreenFormChangedProps) => void,
   onRemove: (id: number) => void,
 };
 
@@ -96,7 +102,7 @@ function ScreenForm(props: ScreenFormProps) {
 
   const handleInputChangeWith = function getInputChangeHandlerByProp(prop: ScreenFormPropName) {
     return function handleInputChange(event: React.ChangeEvent<HTMLInputElement>): void {
-      props.onChange(props.id, prop, event.target.value);
+      props.onChange(props.id, { [prop]: event.target.value });
     };
   };
 
