@@ -97,7 +97,7 @@ function ScreenForm(props: ScreenFormProps) {
   }
 
   const renderedRatio: number = ratio || defaultDisplayedRatio;
-  const containerStyle: { width: string } = getContainerStyle(renderedRatio);
+  const wrapperStyle: { width: string } = getContainerStyle(renderedRatio);
   const ratioStyle: { paddingBottom: string } = getRatioStyle(renderedRatio);
 
   const handleInputChangeWith = function getInputChangeHandlerByProp(prop: ScreenFormPropName) {
@@ -122,112 +122,119 @@ function ScreenForm(props: ScreenFormProps) {
   return (
     <div
       data-testid="ScreenForm"
-      className="ScreenForm"
-      style={containerStyle}
+      style={wrapperStyle}
     >
+      <div className="ScreenForm-function">
+        {/* Function buttons go here */}
+      </div>
+
       <div
-        className="ScreenForm-ratio"
-        style={ratioStyle}
-      />
+        className="ScreenForm-screen"
+      >
+        <div
+          className="ScreenForm-ratio"
+          style={ratioStyle}
+        />
 
-      <div className="ScreenForm-content">
-        <div className="ScreenForm-bg">
-          <ScreenFormBg width={getFormWidth(renderedRatio)} height={getFormHeight(renderedRatio)} />
-        </div>
+        <div className="ScreenForm-content">
+          <div className="ScreenForm-bg">
+            <ScreenFormBg width={getFormWidth(renderedRatio)} height={getFormHeight(renderedRatio)} />
+          </div>
 
-        <div className="ScreenForm-grid">
-          <ul className="ScreenForm-grid-item ScreenForm-width">
-            <li>
-              <input
-                ref={widthInputRef}
-                className="ScreenForm-input"
-                type="text"
-                value={props.width}
-                inputMode="numeric"
-                title="Width"
-                onChange={handleInputChangeWith('width')}
-                onBlur={handleInputBlur}
-              />&nbsp;px
-            </li>
-            <li>
-              {size ? `${size.width.toFixed(2)}cm` : '-'}
-            </li>
-          </ul>
-          <ul className="ScreenForm-grid-item ScreenForm-height">
-            <li>
-              <input
-                ref={heightInputRef}
-                className="ScreenForm-input"
-                type="text"
-                value={props.height}
-                inputMode="numeric"
-                title="Height"
-                onChange={handleInputChangeWith('height')}
-                onBlur={handleInputBlur}
-              />&nbsp;px
-            </li>
-            <li>
-              {size ? `${size.height.toFixed(2)}cm` : '-'}
-            </li>
-          </ul>
-          <ul className="ScreenForm-grid-item ScreenForm-diagonal">
-            <li>
-              <input
-                ref={diagonalInputRef}
-                className="ScreenForm-input"
-                type="text"
-                value={props.diagonal}
-                inputMode="decimal"
-                title="Diagonal"
-                onChange={handleInputChangeWith('diagonal')}
-                onBlur={handleInputBlur}
-              />&nbsp;in
-            </li>
-          </ul>
-        </div>
+          <div className="ScreenForm-grid">
+            <ul className="ScreenForm-grid-item ScreenForm-width">
+              <li>
+                <input
+                  ref={widthInputRef}
+                  className="ScreenForm-input"
+                  type="text"
+                  value={props.width}
+                  inputMode="numeric"
+                  title="Width"
+                  onChange={handleInputChangeWith('width')}
+                  onBlur={handleInputBlur}
+                />&nbsp;px
+              </li>
+              <li>
+                {size ? `${size.width.toFixed(2)}cm` : '-'}
+              </li>
+            </ul>
+            <ul className="ScreenForm-grid-item ScreenForm-height">
+              <li>
+                <input
+                  ref={heightInputRef}
+                  className="ScreenForm-input"
+                  type="text"
+                  value={props.height}
+                  inputMode="numeric"
+                  title="Height"
+                  onChange={handleInputChangeWith('height')}
+                  onBlur={handleInputBlur}
+                />&nbsp;px
+              </li>
+              <li>
+                {size ? `${size.height.toFixed(2)}cm` : '-'}
+              </li>
+            </ul>
+            <ul className="ScreenForm-grid-item ScreenForm-diagonal">
+              <li>
+                <input
+                  ref={diagonalInputRef}
+                  className="ScreenForm-input"
+                  type="text"
+                  value={props.diagonal}
+                  inputMode="decimal"
+                  title="Diagonal"
+                  onChange={handleInputChangeWith('diagonal')}
+                  onBlur={handleInputBlur}
+                />&nbsp;in
+              </li>
+            </ul>
+          </div>
 
-        <div className="ScreenForm-misc">
-          <ul>
-            <li className="ScreenForm-misc-pairs">
-              <span className="ScreenForm-misc-pair">
-                <span className="ScreenForm-misc-key">
-                  Aspect&nbsp;ratio&nbsp;
+          <div className="ScreenForm-misc">
+            <ul className="ScreenForm-misc-info">
+              <li className="ScreenForm-misc-pairs">
+                <span className="ScreenForm-misc-pair">
+                  <span className="ScreenForm-misc-key">
+                    Aspect&nbsp;ratio&nbsp;
+                  </span>
+                  <span className="ScreenForm-misc-value">
+                    {ratio ? `${ratio.toFixed(2)}:1 (${getAspectRatioString(ratio)})` : '-'}
+                  </span>
                 </span>
-                <span className="ScreenForm-misc-value">
-                  {ratio ? `${ratio.toFixed(2)}:1 (${getAspectRatioString(ratio)})` : '-'}
+              </li>
+              <li className="ScreenForm-misc-pairs">
+                <span className="ScreenForm-misc-pair">
+                  <span className="ScreenForm-misc-key">
+                    DPI&nbsp;
+                  </span>
+                  <span className="ScreenForm-misc-value">
+                    {dpi ? dpi.toFixed(2) : '-'}
+                  </span>
                 </span>
-              </span>
-            </li>
-            <li className="ScreenForm-misc-pairs">
-              <span className="ScreenForm-misc-pair">
-                <span className="ScreenForm-misc-key">
-                  DPI&nbsp;
+                {' '}
+                <span className="ScreenForm-misc-pair">
+                  <span className="ScreenForm-misc-key">
+                    Dot&nbsp;pitch&nbsp;
+                  </span>
+                  <span className="ScreenForm-misc-value">
+                    {dotPitch ? `${dotPitch.toFixed(4)}mm` : '-'}
+                  </span>
                 </span>
-                <span className="ScreenForm-misc-value">
-                  {dpi ? dpi.toFixed(2) : '-'}
+              </li>
+              <li className="ScreenForm-misc-pairs">
+                <span className="ScreenForm-misc-pair">
+                  <span className="ScreenForm-misc-key">
+                    Pixel&nbsp;count&nbsp;
+                  </span>
+                  <span className="ScreenForm-misc-value">
+                    {totalPixels ? insertCommas(totalPixels) : '-'}
+                  </span>
                 </span>
-              </span>
-              {' '}
-              <span className="ScreenForm-misc-pair">
-                <span className="ScreenForm-misc-key">
-                  Dot&nbsp;pitch&nbsp;
-                </span>
-                <span className="ScreenForm-misc-value">
-                  {dotPitch ? `${dotPitch.toFixed(4)}mm` : '-'}
-                </span>
-              </span>
-            </li>
-            <li className="ScreenForm-misc-pairs">
-              <span className="ScreenForm-misc-pair">
-                <span className="ScreenForm-misc-key">
-                  Pixel&nbsp;count&nbsp;
-                </span>
-                <span className="ScreenForm-misc-value">
-                  {totalPixels ? insertCommas(totalPixels) : '-'}
-                </span>
-              </span>
-            </li>
-          </ul>
+              </li>
+            </ul>
+          </div>
         </div>
       </div>
     </div>
