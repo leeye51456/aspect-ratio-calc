@@ -100,6 +100,13 @@ function ScreenForm(props: ScreenFormProps) {
   const wrapperStyle: { width: string } = getContainerStyle(renderedRatio);
   const ratioStyle: { paddingBottom: string } = getRatioStyle(renderedRatio);
 
+  const handleRotateClick = function changeSelfRotated() {
+    props.onChange(props.id, {
+      width: props.height,
+      height: props.width,
+    });
+  };
+
   const handleInputChangeWith = function getInputChangeHandlerByProp(prop: ScreenFormPropName) {
     return function handleInputChange(event: React.ChangeEvent<HTMLInputElement>): void {
       props.onChange(props.id, { [prop]: event.target.value });
@@ -125,7 +132,13 @@ function ScreenForm(props: ScreenFormProps) {
       style={wrapperStyle}
     >
       <div className="ScreenForm-function">
-        {/* Function buttons go here */}
+        <button
+          className="ScreenForm-function-button"
+          type="button"
+          onClick={handleRotateClick}
+        >
+          Rotate
+        </button>
       </div>
 
       <div
