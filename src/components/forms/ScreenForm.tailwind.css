@@ -1,7 +1,23 @@
 @layer components {
-  .ScreenForm {
+  .ScreenForm-function {
+    @apply ml-1 mb-1;
+  }
+
+  .ScreenForm-function-button {
+    @apply mr-1;
+    @apply rounded;
+    @apply w-8 h-8;
+    @apply bg-gray-400;
+  }
+
+  .ScreenForm-function-button-negative {
+    @apply ScreenForm-function-button;
+    @apply bg-red-300;
+  }
+
+  .ScreenForm-screen {
     @apply relative;
-    @apply w-full; /* Default width */
+    @apply w-full;
     @apply leading-tight;
   }
 
