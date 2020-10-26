@@ -35,6 +35,7 @@
 
   .App-main-add {
     @apply relative;
+    @apply mt-10;
     @apply border-4 border-blue-500 border-dashed;
     @apply w-full;
     @apply bg-blue-300 bg-opacity-25;
