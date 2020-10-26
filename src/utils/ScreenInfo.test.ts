@@ -2,8 +2,6 @@ import {
   ScreenInfo,
   getScreenInfo,
   ScreenInfoWithDiagonal,
-  isScreenInfoWithDiagonal,
-  isScreenInfoBase,
   ScreenInfoBase
 } from './ScreenInfo';
 
@@ -18,15 +16,15 @@ test('utils/ScreenInfo: User defined type guard', () => {
     dotPitch: 1,
     size: { width: 1, height: 1 },
   };
-  expect(isScreenInfoWithDiagonal(withDiagonal)).toBe(true);
-  expect(isScreenInfoBase(withDiagonal)).toBe(true); // ScreenInfoWithDiagonal extends ScreenInfoBase
+  expect(withDiagonal instanceof ScreenInfoWithDiagonal).toBe(true);
+  expect(withDiagonal instanceof ScreenInfoBase).toBe(false);
 
   const withoutDiagonal: ScreenInfoBase = {
     pixelCount: { width: 1, height: 1, total: 1 },
     ratio: 1,
   };
-  expect(isScreenInfoWithDiagonal(withoutDiagonal)).toBe(false);
-  expect(isScreenInfoBase(withoutDiagonal)).toBe(true);
+  expect(withoutDiagonal instanceof ScreenInfoWithDiagonal).toBe(false);
+  expect(withoutDiagonal instanceof ScreenInfoBase).toBe(true);
 });
 
 test('utils/ScreenInfo: Invalid parameter', () => {
@@ -35,24 +33,24 @@ test('utils/ScreenInfo: Invalid parameter', () => {
   const passUnparsableDiagonal: Returned = getScreenInfo(1, 1, 'diagonal');
   expect(passUnparsableWidth).toBeNull();
   expect(passUnparsableHeight).toBeNull();
-  expect(isScreenInfoWithDiagonal(passUnparsableDiagonal)).toBe(false);
-  expect(isScreenInfoBase(passUnparsableDiagonal)).toBe(true);
+  expect(passUnparsableDiagonal instanceof ScreenInfoWithDiagonal).toBe(false);
+  expect(passUnparsableDiagonal instanceof ScreenInfoBase).toBe(true);
 
   const passZeroWidth: Returned = getScreenInfo(0, 1, 1);
   const passZeroHeight: Returned = getScreenInfo(1, 0, 1);
   const passZeroDiagonal: Returned = getScreenInfo(1, 1, 0);
   expect(passZeroWidth).toBeNull();
   expect(passZeroHeight).toBeNull();
-  expect(isScreenInfoWithDiagonal(passZeroDiagonal)).toBe(false);
-  expect(isScreenInfoBase(passZeroDiagonal)).toBe(true);
+  expect(passZeroDiagonal instanceof ScreenInfoWithDiagonal).toBe(false);
+  expect(passZeroDiagonal instanceof ScreenInfoBase).toBe(true);
 
   const passNegativeWidth: Returned = getScreenInfo(-1, 1, 1);
   const passNegativeHeight: Returned = getScreenInfo(1, -1, 1);
   const passNegativeDiagonal: Returned = getScreenInfo(1, 1, -1);
   expect(passNegativeWidth).toBeNull();
   expect(passNegativeHeight).toBeNull();
-  expect(isScreenInfoWithDiagonal(passNegativeDiagonal)).toBe(false);
-  expect(isScreenInfoBase(passNegativeDiagonal)).toBe(true);
+  expect(passNegativeDiagonal instanceof ScreenInfoWithDiagonal).toBe(false);
+  expect(passNegativeDiagonal instanceof ScreenInfoBase).toBe(true);
 
   const UNSAFE_INTEGER: number = Number.MAX_SAFE_INTEGER + 1;
   const passUnsafeIntegerWidth: Returned = getScreenInfo(UNSAFE_INTEGER, 1, 1);
@@ -65,35 +63,35 @@ test('utils/ScreenInfo: Invalid parameter', () => {
   const passInfinityDiagonal: Returned = getScreenInfo(1, 1, Infinity);
   expect(passInfinityWidth).toBeNull();
   expect(passInfinityHeight).toBeNull();
-  expect(isScreenInfoWithDiagonal(passInfinityDiagonal)).toBe(false);
-  expect(isScreenInfoBase(passInfinityDiagonal)).toBe(true);
+  expect(passInfinityDiagonal instanceof ScreenInfoWithDiagonal).toBe(false);
+  expect(passInfinityDiagonal instanceof ScreenInfoBase).toBe(true);
 
   const passNaNWidth: Returned = getScreenInfo(NaN, 1, 1);
   const passNaNHeight: Returned = getScreenInfo(1, NaN, 1);
   const passNaNDiagonal: Returned = getScreenInfo(1, 1, NaN);
   expect(passNaNWidth).toBeNull();
   expect(passNaNHeight).toBeNull();
-  expect(isScreenInfoWithDiagonal(passNaNDiagonal)).toBe(false);
-  expect(isScreenInfoBase(passNaNDiagonal)).toBe(true);
+  expect(passNaNDiagonal instanceof ScreenInfoWithDiagonal).toBe(false);
+  expect(passNaNDiagonal instanceof ScreenInfoBase).toBe(true);
 });
 
 test('utils/ScreenInfo: Preserve original values', () => {
   const integerDiagonal: ScreenInfoWithDiagonal = getScreenInfo(1920, 1080, 24) as ScreenInfoWithDiagonal;
-  expect(isScreenInfoWithDiagonal(integerDiagonal)).toBe(true);
+  expect(integerDiagonal instanceof ScreenInfoWithDiagonal).toBe(true);
   expect(integerDiagonal.pixelCount.width).toBe(1920);
   expect(integerDiagonal.pixelCount.height).toBe(1080);
   expect(integerDiagonal.diagonal).toBe(24);
 
   // `15.3 + 0.3` is `15.600000000000001`
   const floatDiagonal: ScreenInfoWithDiagonal = getScreenInfo(1366, 768, 15.3 + 0.3) as ScreenInfoWithDiagonal;
-  expect(isScreenInfoWithDiagonal(floatDiagonal)).toBe(true);
+  expect(floatDiagonal instanceof ScreenInfoWithDiagonal).toBe(true);
   expect(floatDiagonal.pixelCount.width).toBe(1366);
   expect(floatDiagonal.pixelCount.height).toBe(768);
   expect(floatDiagonal.diagonal).toBeCloseTo(15.6, 8);
 
   const withoutDiagonal: ScreenInfoBase = getScreenInfo(1920, 1080) as ScreenInfoBase;
-  expect(isScreenInfoWithDiagonal(withoutDiagonal)).toBe(false);
-  expect(isScreenInfoBase(withoutDiagonal)).toBe(true);
+  expect(withoutDiagonal instanceof ScreenInfoWithDiagonal).toBe(false);
+  expect(withoutDiagonal instanceof ScreenInfoBase).toBe(true);
   expect(withoutDiagonal.pixelCount.width).toBe(1920);
   expect(withoutDiagonal.pixelCount.height).toBe(1080);
 });

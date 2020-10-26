@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import getAspectRatioString from '../../utils/getAspectRatioString';
 import {
   getScreenInfo,
-  isScreenInfoWithDiagonal,
   ScreenInfo,
   ScreenInfoBase,
   ScreenInfoWithDiagonal
@@ -31,8 +30,8 @@ interface AddNewScreenFormParam {
   setNextId: ReactSetState<number>,
 }
 
-const buildScreenInfoYaml = function buildYamlFromScreenInfo(screenInfo: ScreenInfoWithDiagonal | ScreenInfoBase): string {
-  if (isScreenInfoWithDiagonal(screenInfo)) {
+const buildScreenInfoYaml = function buildYamlFromScreenInfo(screenInfo: ScreenInfo): string {
+  if (screenInfo instanceof ScreenInfoWithDiagonal) {
     const { pixelCount, diagonal, ratio, dpi, dotPitch, size }: ScreenInfoWithDiagonal = screenInfo;
     return '- ' + [
       `Screen: ${pixelCount.width} x ${pixelCount.height}`,
