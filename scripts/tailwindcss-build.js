@@ -62,6 +62,11 @@ function tailwindcssBuild() {
   const globPatterns = process.argv.length < 3 ? [''] : process.argv.slice(2);
   const fileNames = getFileNamesFromGlobPatterns(globPatterns);
 
+  if (fileNames.length === 0) {
+    printError('No files to build.');
+    return 0;
+  }
+
   const failedFiles = buildAll(fileNames);
   if (failedFiles.length > 0) {
     printError(`Failed to build the files below.\n${failedFiles.join('\n')}`);
