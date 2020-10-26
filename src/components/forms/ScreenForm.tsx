@@ -1,5 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 import ScreenFormBg from './ScreenFormBg';
+import copyToClipboard from '../../utils/copyToClipboard';
 import {
   getScreenInfo,
   RectSize,
@@ -106,6 +107,14 @@ function ScreenForm(props: ScreenFormProps) {
     });
   };
 
+  const handleCopyClick = function copySelf() {
+    const { width, height, diagonal }: ScreenFormProps = props;
+    const screenInfo: ScreenInfo | null = getScreenInfo(width, height, diagonal);
+    if (screenInfo !== null) {
+      copyToClipboard(`${screenInfo.toYaml()}\n`);
+    }
+  }
+
   const handleRemoveClick = function removeSelf() {
     props.onRemove(props.id);
   };
@@ -141,6 +150,13 @@ function ScreenForm(props: ScreenFormProps) {
           onClick={handleRotateClick}
         >
           Rotate
+        </button>
+        <button
+          className="ScreenForm-function-button"
+          type="button"
+          onClick={handleCopyClick}
+        >
+          Copy
         </button>
         <button
           className="ScreenForm-function-button-negative"

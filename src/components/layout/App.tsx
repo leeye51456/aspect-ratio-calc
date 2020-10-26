@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import copyToClipboard from '../../utils/copyToClipboard';
 import {
   getScreenInfo,
   ScreenInfo,
@@ -48,37 +49,6 @@ const getWholeYaml = function getWholeYamlFromScreenFormData(screenFormData: Scr
   return yamls.join('\n\n') + '\n';
 };
 
-// https://stackoverflow.com/q/34045777
-const copyScreenDataAsYaml = function copyScreenDataAsYamlToClipboard(screenFormData: ScreenFormProps[]): void {
-  const textareaElement: HTMLTextAreaElement | null = document.createElement('textarea');
-  if (!textareaElement) {
-    return;
-  }
-
-  textareaElement.contentEditable = 'true';
-  textareaElement.readOnly = false;
-  textareaElement.value = getWholeYaml(screenFormData);
-  document.body.appendChild(textareaElement);
-
-  const range: Range = document.createRange();
-  range.selectNodeContents(textareaElement);
-
-  const selection: Selection | null = window.getSelection();
-  if (!selection) {
-    return;
-  }
-  selection.removeAllRanges();
-  selection.addRange(range);
-
-  textareaElement.select();
-  textareaElement.setSelectionRange(0, textareaElement.value.length);
-
-  document.execCommand('copy');
-  textareaElement.blur();
-
-  document.body.removeChild(textareaElement);
-};
-
 const addNewScreenForm = function addNewScreenFormToApp(
   {
     screenData,
@@ -112,7 +82,7 @@ function App() {
   const [ nextId, setNextId ] = useState(0);
 
   const handleCopyClick = function handleCopyAsYamlClick(): void {
-    copyScreenDataAsYaml(screenIdOrder.map((id) => screenData[id]));
+    copyToClipboard(getWholeYaml(screenIdOrder.map((id) => screenData[id])));
   };
 
   const handleAddClick = function handleAddNewScreenFormClick(): void {
