@@ -1,3 +1,5 @@
+import getAspectRatioString from './getAspectRatioString';
+
 export interface PixelCount {
   readonly width: number,
   readonly height: number,
@@ -12,6 +14,8 @@ export interface RectSize {
 const INCH_TO_CENTIMETER_FACTOR: number = 2.54;
 
 export class ScreenInfoBase {
+  protected map: Map<string, string> | null;
+
   readonly pixelCount: PixelCount;
   readonly ratio: number;
 
@@ -25,7 +29,30 @@ export class ScreenInfoBase {
       total: integerWidth * integerHeight,
     };
     this.ratio = integerWidth / integerHeight;
+    this.map = null;
   }
+
+  toMap = (): Map<string, string> => {
+    if (this.map) {
+      return this.map;
+    }
+
+    const { pixelCount, ratio }: ScreenInfoBase = this;
+    const newMap = new Map();
+    newMap.set('Screen', `${pixelCount.width} x ${pixelCount.height}`);
+    newMap.set('AspectRatio', `${ratio.toFixed(2)}:1 (${getAspectRatioString(ratio)})`);
+    newMap.set('PixelCount', `${pixelCount.total}`);
+    this.map = newMap;
+
+    return newMap;
+  }
+
+  toYaml = (): string => {
+    const map = this.toMap();
+    return Array.from(map.keys())
+      .map((key) => `${key}: ${map.get(key)}`)
+      .join('\n');
+  };
 };
 
 export class ScreenInfoWithDiagonal extends ScreenInfoBase {
@@ -44,6 +71,25 @@ export class ScreenInfoWithDiagonal extends ScreenInfoBase {
       width: this.pixelCount.width * this.dotPitch / 10,
       height: this.pixelCount.height * this.dotPitch / 10,
     };
+  }
+
+  toMap = (): Map<string, string> => {
+    if (this.map) {
+      return this.map;
+    }
+
+    const { pixelCount, diagonal, ratio, dpi, dotPitch, size }: ScreenInfoWithDiagonal = this;
+    const newMap = new Map();
+    newMap.set('Screen', `${pixelCount.width} x ${pixelCount.height}`);
+    newMap.set('Diagonal', `${diagonal}"`);
+    newMap.set('AspectRatio', `${ratio.toFixed(2)}:1 (${getAspectRatioString(ratio)})`);
+    newMap.set('DPI', `${dpi.toFixed(2)}`);
+    newMap.set('DotPitch', `${dotPitch.toFixed(4)}`);
+    newMap.set('Size', `${size.width.toFixed(2)} cm x ${size.height.toFixed(2)} cm`);
+    newMap.set('PixelCount', `${pixelCount.total}`);
+    this.map = newMap;
+
+    return newMap;
   }
 };
 
