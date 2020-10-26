@@ -2,10 +2,9 @@ import React, { useEffect, useRef } from 'react';
 import ScreenFormBg from './ScreenFormBg';
 import {
   getScreenInfo,
-  isScreenInfoBase,
-  isScreenInfoWithDiagonal,
   RectSize,
   ScreenInfo,
+  ScreenInfoBase,
   ScreenInfoWithDiagonal
 } from '../../utils/ScreenInfo';
 import { getAspectRatioString } from '../../utils/getAspectRatioString';
@@ -90,9 +89,9 @@ function ScreenForm(props: ScreenFormProps) {
   let dotPitch: number | null = null;
   let size: RectSize | null = null;
   let totalPixels: number | null = null;
-  if (isScreenInfoWithDiagonal(screenInfo)) {
+  if (screenInfo instanceof ScreenInfoWithDiagonal) {
     ({ ratio, dpi, dotPitch, size, pixelCount: { total: totalPixels } } = screenInfo);
-  } else if (isScreenInfoBase(screenInfo)) {
+  } else if (screenInfo instanceof ScreenInfoBase) {
     ({ ratio, pixelCount: { total: totalPixels } } = screenInfo);
   }
 

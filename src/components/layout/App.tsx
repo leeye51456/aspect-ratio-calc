@@ -1,11 +1,7 @@
 import React, { useState } from 'react';
-import getAspectRatioString from '../../utils/getAspectRatioString';
 import {
   getScreenInfo,
-  isScreenInfoWithDiagonal,
   ScreenInfo,
-  ScreenInfoBase,
-  ScreenInfoWithDiagonal
 } from '../../utils/ScreenInfo';
 import ReactSetState from '../../utils/ReactSetState';
 import ScreenForm, { ScreenFormChangedProps } from '../forms/ScreenForm';
@@ -31,26 +27,9 @@ interface AddNewScreenFormParam {
   setNextId: ReactSetState<number>,
 }
 
-const buildScreenInfoYaml = function buildYamlFromScreenInfo(screenInfo: ScreenInfoWithDiagonal | ScreenInfoBase): string {
-  if (isScreenInfoWithDiagonal(screenInfo)) {
-    const { pixelCount, diagonal, ratio, dpi, dotPitch, size }: ScreenInfoWithDiagonal = screenInfo;
-    return '- ' + [
-      `Screen: ${pixelCount.width} x ${pixelCount.height}`,
-      `Diagonal: ${diagonal}"`,
-      `AspectRatio: ${ratio.toFixed(2)}:1 (${getAspectRatioString(ratio)})`,
-      `DPI: ${dpi.toFixed(2)}`,
-      `DotPitch: ${dotPitch.toFixed(4)}`,
-      `Size: ${size.width.toFixed(2)} cm x ${size.height.toFixed(2)} cm`,
-      `PixelCount: ${pixelCount.total}`,
-    ].join('\n  ');
-  } else {
-    const { pixelCount, ratio }: ScreenInfoBase = screenInfo;
-    return '- ' + [
-      `Screen: ${pixelCount.width} x ${pixelCount.height}`,
-      `AspectRatio: ${ratio.toFixed(2)}:1 (${getAspectRatioString(ratio)})`,
-      `PixelCount: ${pixelCount.total}`,
-    ].join('\n  ');
-  }
+const buildScreenInfoYamlEntry = function buildScreenInfoYamlEntryOfArray(screenInfo: ScreenInfo): string {
+  const map = screenInfo.toMap();
+  return '- ' + Array.from(map.keys()).map((key) => `${key}: ${map.get(key)}`).join('\n  ');
 };
 
 const getWholeYaml = function getWholeYamlFromScreenFormData(screenFormData: ScreenFormProps[]): string {
@@ -65,7 +44,7 @@ const getWholeYaml = function getWholeYamlFromScreenFormData(screenFormData: Scr
     },
     []
   );
-  const yamls: string[] = screens.map((screen: ScreenInfo) => buildScreenInfoYaml(screen));
+  const yamls: string[] = screens.map((screen: ScreenInfo) => buildScreenInfoYamlEntry(screen));
   return yamls.join('\n\n') + '\n';
 };
 

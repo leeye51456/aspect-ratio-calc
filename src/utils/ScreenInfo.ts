@@ -1,29 +1,97 @@
+import getAspectRatioString from './getAspectRatioString';
+
 export interface PixelCount {
-  width: number,
-  height: number,
-  total: number,
+  readonly width: number,
+  readonly height: number,
+  readonly total: number,
 };
 
 export interface RectSize {
-  width: number,
-  height: number,
+  readonly width: number,
+  readonly height: number,
 };
-
-export interface ScreenInfoBase {
-  pixelCount: PixelCount,
-  ratio: number,
-};
-
-export interface ScreenInfoWithDiagonal extends ScreenInfoBase {
-  diagonal: number,
-  dpi: number,
-  dotPitch: number,
-  size: RectSize,
-};
-
-export type ScreenInfo = ScreenInfoWithDiagonal | ScreenInfoBase;
 
 const INCH_TO_CENTIMETER_FACTOR: number = 2.54;
+
+export class ScreenInfoBase {
+  protected map: Map<string, string> | null;
+
+  readonly pixelCount: PixelCount;
+  readonly ratio: number;
+
+  constructor(width: number, height: number) {
+    const integerWidth: number = Math.floor(width);
+    const integerHeight: number = Math.floor(height);
+
+    this.pixelCount = {
+      width: integerWidth,
+      height: integerHeight,
+      total: integerWidth * integerHeight,
+    };
+    this.ratio = integerWidth / integerHeight;
+    this.map = null;
+  }
+
+  toMap = (): Map<string, string> => {
+    if (this.map) {
+      return this.map;
+    }
+
+    const { pixelCount, ratio }: ScreenInfoBase = this;
+    const newMap = new Map();
+    newMap.set('Screen', `${pixelCount.width} x ${pixelCount.height}`);
+    newMap.set('AspectRatio', `${ratio.toFixed(2)}:1 (${getAspectRatioString(ratio)})`);
+    newMap.set('PixelCount', `${pixelCount.total}`);
+    this.map = newMap;
+
+    return newMap;
+  }
+
+  toYaml = (): string => {
+    const map = this.toMap();
+    return Array.from(map.keys())
+      .map((key) => `${key}: ${map.get(key)}`)
+      .join('\n');
+  };
+};
+
+export class ScreenInfoWithDiagonal extends ScreenInfoBase {
+  readonly diagonal: number;
+  readonly dpi: number;
+  readonly dotPitch: number;
+  readonly size: RectSize;
+
+  constructor(width: number, height: number, diagonal: number) {
+    super(width, height);
+
+    this.diagonal = diagonal;
+    this.dpi = Math.sqrt(this.pixelCount.width ** 2 + this.pixelCount.height ** 2) / diagonal;
+    this.dotPitch = 10 * INCH_TO_CENTIMETER_FACTOR / this.dpi;
+    this.size = {
+      width: this.pixelCount.width * this.dotPitch / 10,
+      height: this.pixelCount.height * this.dotPitch / 10,
+    };
+  }
+
+  toMap = (): Map<string, string> => {
+    if (this.map) {
+      return this.map;
+    }
+
+    const { pixelCount, diagonal, ratio, dpi, dotPitch, size }: ScreenInfoWithDiagonal = this;
+    const newMap = new Map();
+    newMap.set('Screen', `${pixelCount.width} x ${pixelCount.height}`);
+    newMap.set('Diagonal', `${diagonal}"`);
+    newMap.set('AspectRatio', `${ratio.toFixed(2)}:1 (${getAspectRatioString(ratio)})`);
+    newMap.set('DPI', `${dpi.toFixed(2)}`);
+    newMap.set('DotPitch', `${dotPitch.toFixed(4)}`);
+    newMap.set('Size', `${size.width.toFixed(2)} cm x ${size.height.toFixed(2)} cm`);
+    newMap.set('PixelCount', `${pixelCount.total}`);
+    this.map = newMap;
+
+    return newMap;
+  }
+};
 
 export const getScreenInfo = function getScreenInfoFrom(
   width: number | string,
@@ -54,34 +122,10 @@ export const getScreenInfo = function getScreenInfoFrom(
     }
   }
 
-  const pixelCount: PixelCount = {
-    width: integerWidth,
-    height: integerHeight,
-    total: integerWidth * integerHeight,
-  };
-  const ratio: number = integerWidth / integerHeight;
-
-  if (floatDiagonal) {
-    const dpi: number = Math.sqrt(integerWidth ** 2 + integerHeight ** 2) / floatDiagonal;
-    const dotPitch: number = 10 * INCH_TO_CENTIMETER_FACTOR / dpi;
-    const size: RectSize = {
-      width: integerWidth * dotPitch / 10,
-      height: integerHeight * dotPitch / 10,
-    };
-    return { pixelCount, ratio, dpi, dotPitch, size, diagonal: floatDiagonal };
+  if (floatDiagonal === null) {
+    return new ScreenInfoBase(integerWidth, integerHeight);
   }
-
-  return { pixelCount, ratio };
+  return new ScreenInfoWithDiagonal(integerWidth, integerHeight, floatDiagonal);
 };
 
-export const isScreenInfoWithDiagonal = function isScreenInfoWithDiagonalInterface(
-  obj: ScreenInfo | null
-): obj is ScreenInfoWithDiagonal {
-  return obj !== null && (obj as ScreenInfoWithDiagonal).diagonal !== undefined;
-};
-
-export const isScreenInfoBase = function isScreenInfoInterface(
-  obj: ScreenInfo | null
-): obj is ScreenInfoBase {
-  return obj !== null && (obj as ScreenInfoBase).ratio !== undefined;
-};
+export type ScreenInfo = ScreenInfoWithDiagonal | ScreenInfoBase;
