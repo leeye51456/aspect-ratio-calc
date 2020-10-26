@@ -107,6 +107,10 @@ function ScreenForm(props: ScreenFormProps) {
     });
   };
 
+  const handleRemoveClick = function removeSelf() {
+    props.onRemove(props.id);
+  };
+
   const handleInputChangeWith = function getInputChangeHandlerByProp(prop: ScreenFormPropName) {
     return function handleInputChange(event: React.ChangeEvent<HTMLInputElement>): void {
       props.onChange(props.id, { [prop]: event.target.value });
@@ -138,6 +142,13 @@ function ScreenForm(props: ScreenFormProps) {
           onClick={handleRotateClick}
         >
           Rotate
+        </button>
+        <button
+          className="ScreenForm-function-button-negative"
+          type="button"
+          onClick={handleRemoveClick}
+        >
+          Remove
         </button>
       </div>
 
