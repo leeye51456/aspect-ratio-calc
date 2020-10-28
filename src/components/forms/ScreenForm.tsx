@@ -9,6 +9,7 @@ import {
   ScreenInfoWithDiagonal
 } from '../../utils/ScreenInfo';
 import { getAspectRatioString } from '../../utils/getAspectRatioString';
+import icons from '../common/icons';
 import './ScreenForm.css';
 
 export type ScreenFormPropName = 'width' | 'height' | 'diagonal';
@@ -149,21 +150,21 @@ function ScreenForm(props: ScreenFormProps) {
           type="button"
           onClick={handleRotateClick}
         >
-          Rotate
+          <img src={icons.rotate} alt="Rotate" />
         </button>
         <button
           className="ScreenForm-function-button"
           type="button"
           onClick={handleCopyClick}
         >
-          Copy
+          <img src={icons.copy} alt="Copy" />
         </button>
         <button
           className="ScreenForm-function-button-negative"
           type="button"
           onClick={handleRemoveClick}
         >
-          Remove
+          <img src={icons.remove} alt="Remove" />
         </button>
       </div>
 

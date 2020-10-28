@@ -6,6 +6,7 @@ import {
 } from '../../utils/ScreenInfo';
 import ReactSetState from '../../utils/ReactSetState';
 import ScreenForm, { ScreenFormChangedProps } from '../forms/ScreenForm';
+import icons from '../common/icons';
 import './App.css';
 
 interface ScreenFormProps {
@@ -130,7 +131,7 @@ function App() {
             type="button"
             onClick={handleCopyClick}
           >
-            Copy
+            <img src={icons.copy} alt="Copy all" />
           </button>
         </div>
       </header>
@@ -145,7 +146,7 @@ function App() {
             type="button"
             onClick={handleAddClick}
           >
-            Add
+            <img src={icons.add} alt="Add" />
           </button>
         </div>
       </main>
