@@ -12,7 +12,7 @@ Just visit [deployed page](https://leeye51456.github.io/aspect-ratio-calc/).
 
 ### Run (Development Mode)
 
-`yarn start` runs the app in the development mode. Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+`yarn start` runs the app in the development mode. Open `http://localhost:3000` to view it in the browser.
 
 ### Build for Production
 
@@ -28,4 +28,4 @@ $ mv build/* build/aspect-ratio-calc/
 $ serve build
 ```
 
-After running `serve`, you can run the app [http://localhost:5000/aspect-ratio-calc/](http://localhost:5000/aspect-ratio-calc/). It is recommended to run the app using an incognito window to avoid confusion later.
+After running `serve`, you can run the app `http://localhost:5000/aspect-ratio-calc/`. It is recommended to run the app using an incognito window to avoid confusion later.
