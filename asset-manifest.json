@@ -1,0 +1,26 @@
+{
+  "files": {
+    "main.css": "/aspect-ratio-calc/static/css/main.16f380f1.chunk.css",
+    "main.js": "/aspect-ratio-calc/static/js/main.d72fb035.chunk.js",
+    "main.js.map": "/aspect-ratio-calc/static/js/main.d72fb035.chunk.js.map",
+    "runtime-main.js": "/aspect-ratio-calc/static/js/runtime-main.be6fada4.js",
+    "runtime-main.js.map": "/aspect-ratio-calc/static/js/runtime-main.be6fada4.js.map",
+    "static/js/2.f601bb71.chunk.js": "/aspect-ratio-calc/static/js/2.f601bb71.chunk.js",
+    "static/js/2.f601bb71.chunk.js.map": "/aspect-ratio-calc/static/js/2.f601bb71.chunk.js.map",
+    "index.html": "/aspect-ratio-calc/index.html",
+    "precache-manifest.c67824480dcccc303f2d04480ebfc8f9.js": "/aspect-ratio-calc/precache-manifest.c67824480dcccc303f2d04480ebfc8f9.js",
+    "service-worker.js": "/aspect-ratio-calc/service-worker.js",
+    "static/css/main.16f380f1.chunk.css.map": "/aspect-ratio-calc/static/css/main.16f380f1.chunk.css.map",
+    "static/js/2.f601bb71.chunk.js.LICENSE.txt": "/aspect-ratio-calc/static/js/2.f601bb71.chunk.js.LICENSE.txt",
+    "static/media/add.svg": "/aspect-ratio-calc/static/media/add.0e3e08bc.svg",
+    "static/media/copy.svg": "/aspect-ratio-calc/static/media/copy.72dd793a.svg",
+    "static/media/remove.svg": "/aspect-ratio-calc/static/media/remove.a24d83e3.svg",
+    "static/media/rotate.svg": "/aspect-ratio-calc/static/media/rotate.c91fa003.svg"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.be6fada4.js",
+    "static/js/2.f601bb71.chunk.js",
+    "static/css/main.16f380f1.chunk.css",
+    "static/js/main.d72fb035.chunk.js"
+  ]
+}
