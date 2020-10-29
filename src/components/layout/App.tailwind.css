@@ -1,0 +1,93 @@
+@layer components {
+  .App {
+    @apply grid grid-rows-app grid-cols-app-min;
+  }
+
+  .App-header {
+    @apply row-start-1 col-start-2;
+    @apply flex flex-no-wrap justify-between;
+    @apply mx-defaultgap;
+    @apply border-b border-gray-400;
+    @apply px-2 py-2;
+  }
+
+  .App-header-title {
+    @apply text-xl font-bold;
+  }
+
+  .App-header-button-container {
+    @apply flex-grow-0;
+  }
+
+  .App-header-button {
+    @apply ml-1;
+    @apply rounded;
+    @apply w-8 h-8;
+    @apply bg-teal-200;
+  }
+
+  .App-main {
+    @apply row-start-2 col-start-2;
+    @apply grid grid-cols-app-main-min gap-defaultgap;
+    @apply place-items-start;
+    @apply m-defaultgap;
+  }
+
+  .App-main-add {
+    @apply relative;
+    @apply mt-10;
+    @apply border-4 border-blue-500 border-dashed;
+    @apply w-full;
+    @apply bg-blue-300 bg-opacity-25;
+  }
+
+  .App-main-add-ratio {
+    @apply pb-9/16;
+  }
+
+  .App-main-add-button {
+    @apply absolute;
+    @apply inset-0;
+    @apply w-full;
+  }
+
+  @screen sm {
+    .App {
+      @apply grid-cols-app-1;
+    }
+
+    .App-main {
+      @apply grid grid-cols-app-main-1;
+    }
+  }
+
+  @screen md {
+    .App {
+      @apply grid-cols-app-2;
+    }
+
+    .App-main {
+      @apply grid grid-cols-app-main-2;
+    }
+  }
+
+  @screen lg {
+    .App {
+      @apply grid-cols-app-3;
+    }
+
+    .App-main {
+      @apply grid grid-cols-app-main-3;
+    }
+  }
+
+  @screen xl {
+    .App {
+      @apply grid-cols-app-4;
+    }
+
+    .App-main {
+      @apply grid grid-cols-app-main-4;
+    }
+  }
+}

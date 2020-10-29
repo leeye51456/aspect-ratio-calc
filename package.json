@@ -1,7 +1,19 @@
 {
   "name": "aspect-ratio-calc",
-  "version": "0.1.0",
+  "version": "1.0.0",
+  "description": "Aspect ratio calculator web application",
+  "homepage": "https://leeye51456.github.io/aspect-ratio-calc/",
+  "bugs": "https://github.com/leeye51456/aspect-ratio-calc/issues",
+  "license": "MIT",
   "private": true,
+  "author": {
+    "name": "leeye51456",
+    "url": "https://github.com/leeye51456"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/leeye51456/aspect-ratio-calc"
+  },
   "dependencies": {
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.3.2",
@@ -13,11 +25,22 @@
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react-scripts": "3.4.3",
+    "tailwindcss": "^1.8.10",
     "typescript": "~3.7.2"
   },
   "scripts": {
+    "check-version": "node scripts/check-version.js",
+    "twb": "node scripts/tailwindcss-build",
+    "twc": "node scripts/tailwindcss-clean",
+    "twcb": "yarn run twc && yarn run twb",
+    "prestart": "yarn run twcb",
     "start": "react-scripts start",
+    "prebuild": "yarn run twcb",
     "build": "react-scripts build",
+    "predeploy": "yarn run check-version && yarn run build",
+    "deploy": "gh-pages -d build -m \"Deploy $npm_package_version\"",
+    "postdeploy": "git tag $npm_package_version && git push origin $npm_package_version",
+    "pretest": "yarn run twcb",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
@@ -35,5 +58,11 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "gh-pages": "^3.1.0",
+    "glob": "^7.1.6",
+    "stylelint": "^13.7.2",
+    "stylelint-config-standard": "^20.0.0"
   }
 }

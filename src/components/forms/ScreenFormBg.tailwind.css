@@ -1,0 +1,13 @@
+@layer components {
+  .ScreenFormBg-svg-stroke {
+    @apply stroke-current;
+    @apply stroke-1;
+    @apply text-gray-600;
+  }
+
+  .ScreenFormBg-svg-fill {
+    @apply fill-current;
+    @apply stroke-0;
+    @apply text-gray-600;
+  }
+}
