@@ -29,6 +29,7 @@
     "typescript": "~3.7.2"
   },
   "scripts": {
+    "check-version": "node scripts/check-version.js",
     "twb": "node scripts/tailwindcss-build",
     "twc": "node scripts/tailwindcss-clean",
     "twcb": "yarn run twc && yarn run twb",
@@ -36,6 +37,9 @@
     "start": "react-scripts start",
     "prebuild": "yarn run twcb",
     "build": "react-scripts build",
+    "predeploy": "yarn run check-version && yarn run build",
+    "deploy": "gh-pages -d build -m \"Deploy $npm_package_version\"",
+    "postdeploy": "git tag $npm_package_version && git push origin $npm_package_version",
     "pretest": "yarn run twcb",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
