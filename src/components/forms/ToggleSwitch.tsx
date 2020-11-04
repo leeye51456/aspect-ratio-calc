@@ -15,16 +15,21 @@ function ToggleSwitch(props: ToggleSwitchProps) {
   };
 
   return (
-    <label>
-      <span>
+    <label className="ToggleSwitch">
+      <span className="ToggleSwitch-label">
         {uncheckedSideLabel}
       </span>
       <input
+        className="ToggleSwitch-checkbox"
         type="checkbox"
         checked={checked}
         onChange={handleInputChange}
       />
-      <span>
+      <span className="ToggleSwitch-switch">
+        <span className="ToggleSwitch-switch-knob">
+        </span>
+      </span>
+      <span className="ToggleSwitch-label">
         {checkedSideLabel}
       </span>
     </label>
