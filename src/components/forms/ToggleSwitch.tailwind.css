@@ -10,6 +10,7 @@
 
   .ToggleSwitch-label {
     @apply inline-block;
+    @apply mx-1;
   }
 
   .ToggleSwitch-checkbox {
