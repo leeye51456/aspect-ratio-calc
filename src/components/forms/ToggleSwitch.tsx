@@ -1,4 +1,5 @@
 import React from 'react';
+import './ToggleSwitch.css';
 
 export interface ToggleSwitchProps {
   uncheckedSideLabel?: string,
