@@ -6,6 +6,7 @@ import {
 } from '../../utils/ScreenInfo';
 import ReactSetState from '../../utils/ReactSetState';
 import ScreenForm, { ScreenFormChangedProps } from '../forms/ScreenForm';
+import ToggleSwitch from '../forms/ToggleSwitch';
 import icons from '../common/icons';
 import './App.css';
 
@@ -81,6 +82,8 @@ function App() {
   const [ screenData, setScreenData ] = useState<ScreenFormData>({});
   const [ screenIdOrder, setScreenIdOrder ] = useState<number[]>([]);
   const [ nextId, setNextId ] = useState(0);
+  const [ diagonalUnit, setDiagonalUnit ] = useState<'cm' | 'in'>('in');
+  const [ sideUnit, setSideUnit ] = useState<'cm' | 'in'>('cm');
 
   const handleCopyClick = function handleCopyAsYamlClick(): void {
     copyToClipboard(getWholeYaml(screenIdOrder.map((id) => screenData[id])));
@@ -108,6 +111,14 @@ function App() {
 
     const nextScreenIdOrder: number[] = screenIdOrder.filter((value) => value !== id);
     setScreenIdOrder(nextScreenIdOrder);
+  };
+
+  const handleDiagonalUnitChange = function handleDiagonalUnitChange(checked: boolean): void {
+    setDiagonalUnit(checked ? 'in' : 'cm');
+  };
+
+  const handleSideUnitChange = function handleSideUnitChange(checked: boolean): void {
+    setSideUnit(checked ? 'in' : 'cm');
   };
 
   const screenForms = screenIdOrder.map((id) => (
@@ -150,6 +161,40 @@ function App() {
           </button>
         </div>
       </main>
+
+      <footer className="App-footer">
+        <h2 className="App-footer-title">
+          Options
+        </h2>
+        <ul className="App-footer-config">
+          <li className="App-footer-config-list">
+            <span className="App-footer-config-key">
+              Width/Height
+            </span>
+            <span className="App-footer-config-value">
+              <ToggleSwitch
+                checkedSideLabel="in"
+                uncheckedSideLabel="cm"
+                checked={sideUnit === 'in'}
+                onChange={handleSideUnitChange}
+              />
+            </span>
+          </li>
+          <li className="App-footer-config-list">
+            <span className="App-footer-config-key">
+              Diagonal
+            </span>
+            <span className="App-footer-config-value">
+              <ToggleSwitch
+                checkedSideLabel="in"
+                uncheckedSideLabel="cm"
+                checked={diagonalUnit === 'in'}
+                onChange={handleDiagonalUnitChange}
+              />
+            </span>
+          </li>
+        </ul>
+      </footer>
     </div>
   );
 }
