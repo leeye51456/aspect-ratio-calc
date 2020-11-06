@@ -7,6 +7,7 @@ import {
 import ReactSetState from '../../utils/ReactSetState';
 import ScreenForm, { ScreenFormChangedProps } from '../forms/ScreenForm';
 import ToggleSwitch from '../forms/ToggleSwitch';
+import { SizeUnitContext } from '../../contexts/unitContexts';
 import icons from '../common/icons';
 import './App.css';
 
@@ -132,69 +133,71 @@ function App() {
 
   return (
     <div className="App" data-testid="App">
-      <header className="App-header">
-        <h1 className="App-header-title">
-          Aspect Ratio Calculator
-        </h1>
-        <div className="App-header-button-container">
-          <button
-            className="App-header-button"
-            type="button"
-            onClick={handleCopyClick}
-          >
-            <img src={icons.copy} alt="Copy all" />
-          </button>
-        </div>
-      </header>
+      <SizeUnitContext.Provider value={sizeUnit}>
+        <header className="App-header">
+          <h1 className="App-header-title">
+            Aspect Ratio Calculator
+          </h1>
+          <div className="App-header-button-container">
+            <button
+              className="App-header-button"
+              type="button"
+              onClick={handleCopyClick}
+            >
+              <img src={icons.copy} alt="Copy all" />
+            </button>
+          </div>
+        </header>
 
-      <main className="App-main">
-        {screenForms}
+        <main className="App-main">
+          {screenForms}
 
-        <div className="App-main-add">
-          <div className="App-main-add-ratio" />
-          <button
-            className="App-main-add-button"
-            type="button"
-            onClick={handleAddClick}
-          >
-            <img src={icons.add} alt="Add" />
-          </button>
-        </div>
-      </main>
+          <div className="App-main-add">
+            <div className="App-main-add-ratio" />
+            <button
+              className="App-main-add-button"
+              type="button"
+              onClick={handleAddClick}
+            >
+              <img src={icons.add} alt="Add" />
+            </button>
+          </div>
+        </main>
 
-      <footer className="App-footer">
-        <h2 className="App-footer-title">
-          Options
-        </h2>
-        <ul className="App-footer-config">
-          <li className="App-footer-config-list">
-            <span className="App-footer-config-key">
-              Width/Height
-            </span>
-            <span className="App-footer-config-value">
-              <ToggleSwitch
-                checkedSideLabel="in"
-                uncheckedSideLabel="cm"
-                checked={sizeUnit === 'in'}
-                onChange={handleSizeUnitChange}
-              />
-            </span>
-          </li>
-          <li className="App-footer-config-list">
-            <span className="App-footer-config-key">
-              Diagonal
-            </span>
-            <span className="App-footer-config-value">
-              <ToggleSwitch
-                checkedSideLabel="in"
-                uncheckedSideLabel="cm"
-                checked={diagonalUnit === 'in'}
-                onChange={handleDiagonalUnitChange}
-              />
-            </span>
-          </li>
-        </ul>
-      </footer>
+        <footer className="App-footer">
+          <h2 className="App-footer-title">
+            Options
+          </h2>
+          <ul className="App-footer-config">
+            <li className="App-footer-config-list">
+              <span className="App-footer-config-key">
+                Width/Height
+              </span>
+              <span className="App-footer-config-value">
+                <ToggleSwitch
+                  checkedSideLabel="in"
+                  uncheckedSideLabel="cm"
+                  checked={sizeUnit === 'in'}
+                  onChange={handleSizeUnitChange}
+                />
+              </span>
+            </li>
+            <li className="App-footer-config-list">
+              <span className="App-footer-config-key">
+                Diagonal
+              </span>
+              <span className="App-footer-config-value">
+                <ToggleSwitch
+                  checkedSideLabel="in"
+                  uncheckedSideLabel="cm"
+                  checked={diagonalUnit === 'in'}
+                  onChange={handleDiagonalUnitChange}
+                />
+              </span>
+            </li>
+          </ul>
+        </footer>
+      </SizeUnitContext.Provider>
     </div>
   );
 }

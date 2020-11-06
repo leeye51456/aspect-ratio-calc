@@ -1,5 +1,6 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useContext, useEffect, useRef } from 'react';
 import ScreenFormBg from './ScreenFormBg';
+import { SizeUnitContext } from '../../contexts/unitContexts';
 import copyToClipboard from '../../utils/copyToClipboard';
 import {
   getScreenInfo,
@@ -7,6 +8,7 @@ import {
   ScreenInfo,
   ScreenInfoBase,
   ScreenInfoWithDiagonal,
+  toInches,
 } from '../../utils/ScreenInfo';
 import { getAspectRatioString } from '../../utils/getAspectRatioString';
 import icons from '../common/icons';
@@ -79,6 +81,8 @@ const insertCommas = function insertCommasIntoIneger(integer: number): string {
 };
 
 function ScreenForm(props: ScreenFormProps) {
+  const sizeUnit = useContext<string>(SizeUnitContext);
+
   const widthInputRef = useRef<HTMLInputElement>(null);
   const heightInputRef = useRef<HTMLInputElement>(null);
   const diagonalInputRef = useRef<HTMLInputElement>(null);
@@ -93,6 +97,12 @@ function ScreenForm(props: ScreenFormProps) {
   let totalPixels: number | null = null;
   if (screenInfo instanceof ScreenInfoWithDiagonal) {
     ({ ratio, dpi, dotPitch, size, pixelCount: { total: totalPixels } } = screenInfo);
+    if (sizeUnit === 'in') {
+      size = {
+        width: toInches(size.width),
+        height: toInches(size.height),
+      };
+    }
   } else if (screenInfo instanceof ScreenInfoBase) {
     ({ ratio, pixelCount: { total: totalPixels } } = screenInfo);
   }
@@ -194,7 +204,7 @@ function ScreenForm(props: ScreenFormProps) {
                 />&nbsp;px
               </li>
               <li>
-                {size ? `${size.width.toFixed(2)}cm` : '-'}
+                {size ? `${size.width.toFixed(2)}${sizeUnit === 'in' ? '"' : sizeUnit}` : '-'}
               </li>
             </ul>
             <ul className="ScreenForm-grid-item ScreenForm-height">
@@ -211,7 +221,7 @@ function ScreenForm(props: ScreenFormProps) {
                 />&nbsp;px
               </li>
               <li>
-                {size ? `${size.height.toFixed(2)}cm` : '-'}
+                {size ? `${size.height.toFixed(2)}${sizeUnit === 'in' ? '"' : sizeUnit}` : '-'}
               </li>
             </ul>
             <ul className="ScreenForm-grid-item ScreenForm-diagonal">
