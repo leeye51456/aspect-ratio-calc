@@ -83,7 +83,7 @@ function App() {
   const [ screenIdOrder, setScreenIdOrder ] = useState<number[]>([]);
   const [ nextId, setNextId ] = useState(0);
   const [ diagonalUnit, setDiagonalUnit ] = useState<'cm' | 'in'>('in');
-  const [ sideUnit, setSideUnit ] = useState<'cm' | 'in'>('cm');
+  const [ sizeUnit, setSizeUnit ] = useState<'cm' | 'in'>('cm');
 
   const handleCopyClick = function handleCopyAsYamlClick(): void {
     copyToClipboard(getWholeYaml(screenIdOrder.map((id) => screenData[id])));
@@ -113,12 +113,12 @@ function App() {
     setScreenIdOrder(nextScreenIdOrder);
   };
 
-  const handleDiagonalUnitChange = function handleDiagonalUnitChange(checked: boolean): void {
+  const handleDiagonalUnitChange = function handleDiagonalUnitToggleChange(checked: boolean): void {
     setDiagonalUnit(checked ? 'in' : 'cm');
   };
 
-  const handleSideUnitChange = function handleSideUnitChange(checked: boolean): void {
-    setSideUnit(checked ? 'in' : 'cm');
+  const handleSizeUnitChange = function handleSizeUnitToggleChange(checked: boolean): void {
+    setSizeUnit(checked ? 'in' : 'cm');
   };
 
   const screenForms = screenIdOrder.map((id) => (
@@ -175,8 +175,8 @@ function App() {
               <ToggleSwitch
                 checkedSideLabel="in"
                 uncheckedSideLabel="cm"
-                checked={sideUnit === 'in'}
-                onChange={handleSideUnitChange}
+                checked={sizeUnit === 'in'}
+                onChange={handleSizeUnitChange}
               />
             </span>
           </li>

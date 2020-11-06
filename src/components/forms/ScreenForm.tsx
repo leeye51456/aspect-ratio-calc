@@ -6,7 +6,7 @@ import {
   RectSize,
   ScreenInfo,
   ScreenInfoBase,
-  ScreenInfoWithDiagonal
+  ScreenInfoWithDiagonal,
 } from '../../utils/ScreenInfo';
 import { getAspectRatioString } from '../../utils/getAspectRatioString';
 import icons from '../common/icons';
@@ -103,14 +103,12 @@ function ScreenForm(props: ScreenFormProps) {
 
   const handleRotateClick = function changeSelfRotated() {
     props.onChange(props.id, {
-      width: props.height,
-      height: props.width,
+      width: height,
+      height: width,
     });
   };
 
   const handleCopyClick = function copySelf() {
-    const { width, height, diagonal }: ScreenFormProps = props;
-    const screenInfo: ScreenInfo | null = getScreenInfo(width, height, diagonal);
     if (screenInfo !== null) {
       copyToClipboard(`${screenInfo.toYaml()}\n`);
     }
@@ -188,7 +186,7 @@ function ScreenForm(props: ScreenFormProps) {
                   ref={widthInputRef}
                   className="ScreenForm-input"
                   type="text"
-                  value={props.width}
+                  value={width}
                   inputMode="numeric"
                   title="Width"
                   onChange={handleInputChangeWith('width')}
@@ -205,7 +203,7 @@ function ScreenForm(props: ScreenFormProps) {
                   ref={heightInputRef}
                   className="ScreenForm-input"
                   type="text"
-                  value={props.height}
+                  value={height}
                   inputMode="numeric"
                   title="Height"
                   onChange={handleInputChangeWith('height')}
@@ -222,7 +220,7 @@ function ScreenForm(props: ScreenFormProps) {
                   ref={diagonalInputRef}
                   className="ScreenForm-input"
                   type="text"
-                  value={props.diagonal}
+                  value={diagonal}
                   inputMode="decimal"
                   title="Diagonal"
                   onChange={handleInputChangeWith('diagonal')}
