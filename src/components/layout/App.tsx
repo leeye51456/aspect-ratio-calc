@@ -82,7 +82,7 @@ const addNewScreenForm = function addNewScreenFormToApp(
 function App() {
   const [ screenData, setScreenData ] = useState<ScreenFormData>({});
   const [ screenIdOrder, setScreenIdOrder ] = useState<number[]>([]);
-  const [ nextId, setNextId ] = useState(0);
+  const [ nextId, setNextId ] = useState<number>(0);
   const [ diagonalUnit, setDiagonalUnit ] = useState<'cm' | 'in'>('in');
   const [ sizeUnit, setSizeUnit ] = useState<'cm' | 'in'>('cm');
 
