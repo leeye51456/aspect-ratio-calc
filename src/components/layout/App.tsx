@@ -1,9 +1,6 @@
 import React, { useState } from 'react';
 import copyToClipboard from '../../utils/copyToClipboard';
-import {
-  getScreenInfo,
-  ScreenInfo,
-} from '../../utils/ScreenInfo';
+import { getScreenInfo, ScreenInfo } from '../../utils/ScreenInfo';
 import ReactSetState from '../../utils/ReactSetState';
 import ScreenForm, { ScreenFormChangedProps } from '../forms/ScreenForm';
 import ToggleSwitch from '../forms/ToggleSwitch';
@@ -53,14 +50,7 @@ const getWholeYaml = function getWholeYamlFromScreenFormData(screenFormData: Scr
 };
 
 const addNewScreenForm = function addNewScreenFormToApp(
-  {
-    screenData,
-    setScreenData,
-    screenIdOrder,
-    setScreenIdOrder,
-    nextId,
-    setNextId,
-  }: AddNewScreenFormParam
+  { screenData, setScreenData, screenIdOrder, setScreenIdOrder, nextId, setNextId }: AddNewScreenFormParam
 ): void {
   const id = nextId;
   setNextId(nextId + 1);
@@ -91,9 +81,7 @@ function App() {
   };
 
   const handleAddClick = function handleAddNewScreenFormClick(): void {
-    addNewScreenForm(
-      { screenData, setScreenData, screenIdOrder, setScreenIdOrder, nextId, setNextId }
-    );
+    addNewScreenForm({ screenData, setScreenData, screenIdOrder, setScreenIdOrder, nextId, setNextId });
   };
 
   const handleScreenFormChange = function handleScreenFormChangeById(

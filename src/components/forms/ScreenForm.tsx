@@ -176,9 +176,7 @@ function ScreenForm(props: ScreenFormProps) {
         </button>
       </div>
 
-      <div
-        className="ScreenForm-screen"
-      >
+      <div className="ScreenForm-screen">
         <div
           className="ScreenForm-ratio"
           style={ratioStyle}
@@ -186,7 +184,10 @@ function ScreenForm(props: ScreenFormProps) {
 
         <div className="ScreenForm-content">
           <div className="ScreenForm-bg">
-            <ScreenFormBg width={getFormWidth(renderedRatio)} height={getFormHeight(renderedRatio)} />
+            <ScreenFormBg
+              width={getFormWidth(renderedRatio)}
+              height={getFormHeight(renderedRatio)}
+            />
           </div>
 
           <div className="ScreenForm-grid">
