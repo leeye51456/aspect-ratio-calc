@@ -69,6 +69,17 @@ const addNewScreenForm = function addNewScreenFormToApp(
   setScreenIdOrder(nextScreenIdOrder);
 };
 
+const toFixedWithoutTrailingZero = function toFixedWithoutTrailingZero(value: number, length: number): string {
+  const integerPart: number = Math.floor(value);
+  if (integerPart === value) {
+    return value.toString();
+  }
+
+  const integerLength: number = integerPart.toString().length;
+  const mantissaLength: number = length - integerLength - 1;
+  return value.toFixed(mantissaLength).replace(/\.?0+$/, '');
+};
+
 function App() {
   const [ screenData, setScreenData ] = useState<ScreenFormData>({});
   const [ screenIdOrder, setScreenIdOrder ] = useState<number[]>([]);
