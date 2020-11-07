@@ -1,14 +1,16 @@
-import React, { useContext, useEffect, useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 import ScreenFormBg from './ScreenFormBg';
-import { SizeUnitContext } from '../../contexts/unitContexts';
 import copyToClipboard from '../../utils/copyToClipboard';
 import {
+  AvailableUnits,
   getScreenInfo,
   RectSize,
   ScreenInfo,
   ScreenInfoBase,
   ScreenInfoWithDiagonal,
+  toCentimeters,
   toInches,
+  tryParsePositiveFloat,
 } from '../../utils/ScreenInfo';
 import { getAspectRatioString } from '../../utils/getAspectRatioString';
 import icons from '../common/icons';
@@ -28,6 +30,8 @@ export interface ScreenFormProps {
   width: string,
   height: string,
   diagonal: string,
+  diagonalUnit: AvailableUnits,
+  sizeUnit: AvailableUnits,
   onChange: (id: number, changed: ScreenFormChangedProps) => void,
   onRemove: (id: number) => void,
 };
@@ -81,14 +85,22 @@ const insertCommas = function insertCommasIntoIneger(integer: number): string {
 };
 
 function ScreenForm(props: ScreenFormProps) {
-  const sizeUnit = useContext<string>(SizeUnitContext);
-
   const widthInputRef = useRef<HTMLInputElement>(null);
   const heightInputRef = useRef<HTMLInputElement>(null);
   const diagonalInputRef = useRef<HTMLInputElement>(null);
 
-  const { width, height, diagonal }: ScreenFormProps = props;
-  const screenInfo: ScreenInfo | null = getScreenInfo(width, height, diagonal);
+  const { width, height, diagonal, diagonalUnit, sizeUnit }: ScreenFormProps = props;
+  const floatDiagonal: number | null = tryParsePositiveFloat(diagonal);
+  let otherDiagonal: string = '-';
+  if (floatDiagonal) {
+    if (diagonalUnit === 'in') {
+      otherDiagonal = `${toCentimeters(floatDiagonal).toFixed(2)}cm`;
+    } else {
+      otherDiagonal = `${toInches(floatDiagonal).toFixed(2)}"`;
+    }
+  }
+
+  const screenInfo: ScreenInfo | null = getScreenInfo(width, height, diagonal, diagonalUnit);
 
   let ratio: number | null = null;
   let dpi: number | null = null;
@@ -236,7 +248,10 @@ function ScreenForm(props: ScreenFormProps) {
                   title="Diagonal"
                   onChange={handleInputChangeWith('diagonal')}
                   onBlur={handleInputBlur}
-                />&nbsp;in
+                />&nbsp;{diagonalUnit}
+              </li>
+              <li>
+                {otherDiagonal}
               </li>
             </ul>
           </div>

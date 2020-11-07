@@ -121,6 +121,7 @@ export const getScreenInfo = function getScreenInfoFrom(
   width: number | string,
   height: number | string,
   diagonal?: number | string,
+  diagonalUnit?: AvailableUnits,
 ) : ScreenInfo | null {
   const integerWidth: number = typeof width === 'number' ? Math.floor(width) : parseInt(width, 10);
   const integerHeight: number = typeof height === 'number' ? Math.floor(height) : parseInt(height, 10);
@@ -135,6 +136,9 @@ export const getScreenInfo = function getScreenInfoFrom(
   }
 
   let floatDiagonal: number | null = tryParsePositiveFloat(diagonal);
+  if (floatDiagonal && diagonalUnit && diagonalUnit === 'cm') {
+    floatDiagonal /= INCH_TO_CENTIMETER_FACTOR;
+  }
 
   if (floatDiagonal === null) {
     return new ScreenInfoBase(integerWidth, integerHeight);
