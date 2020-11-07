@@ -1,5 +1,7 @@
 import getAspectRatioString from './getAspectRatioString';
 
+export type AvailableUnits = 'cm' | 'in';
+
 export interface PixelCount {
   readonly width: number,
   readonly height: number,

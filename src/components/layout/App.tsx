@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import copyToClipboard from '../../utils/copyToClipboard';
-import { getScreenInfo, ScreenInfo } from '../../utils/ScreenInfo';
+import { AvailableUnits, getScreenInfo, ScreenInfo } from '../../utils/ScreenInfo';
 import ReactSetState from '../../utils/ReactSetState';
 import ScreenForm, { ScreenFormChangedProps } from '../forms/ScreenForm';
 import ToggleSwitch from '../forms/ToggleSwitch';
@@ -84,8 +84,8 @@ function App() {
   const [ screenData, setScreenData ] = useState<ScreenFormData>({});
   const [ screenIdOrder, setScreenIdOrder ] = useState<number[]>([]);
   const [ nextId, setNextId ] = useState<number>(0);
-  const [ diagonalUnit, setDiagonalUnit ] = useState<'cm' | 'in'>('in');
-  const [ sizeUnit, setSizeUnit ] = useState<'cm' | 'in'>('cm');
+  const [ diagonalUnit, setDiagonalUnit ] = useState<AvailableUnits>('in');
+  const [ sizeUnit, setSizeUnit ] = useState<AvailableUnits>('cm');
 
   const handleCopyClick = function handleCopyAsYamlClick(): void {
     copyToClipboard(getWholeYaml(screenIdOrder.map((id) => screenData[id])));
