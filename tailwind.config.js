@@ -26,6 +26,9 @@ module.exports = {
       gridTemplateRows: {
         'app': 'auto 1fr',
       },
+      maxWidth: {
+        'content': `${contentWidth}px`,
+      },
       padding: {
         '9/16': '56.25%',
       },

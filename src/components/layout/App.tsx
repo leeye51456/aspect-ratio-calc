@@ -1,11 +1,16 @@
 import React, { useState } from 'react';
 import copyToClipboard from '../../utils/copyToClipboard';
 import {
+  AvailableUnits,
   getScreenInfo,
   ScreenInfo,
+  toCentimeters,
+  toInches,
+  tryParsePositiveFloat,
 } from '../../utils/ScreenInfo';
 import ReactSetState from '../../utils/ReactSetState';
 import ScreenForm, { ScreenFormChangedProps } from '../forms/ScreenForm';
+import ToggleSwitch from '../forms/ToggleSwitch';
 import icons from '../common/icons';
 import './App.css';
 
@@ -14,6 +19,8 @@ interface ScreenFormProps {
   width: string,
   height: string,
   diagonal: string,
+  diagonalUnit: AvailableUnits,
+  sizeUnit: AvailableUnits,
 }
 
 interface ScreenFormData {
@@ -51,20 +58,16 @@ const getWholeYaml = function getWholeYamlFromScreenFormData(screenFormData: Scr
 };
 
 const addNewScreenForm = function addNewScreenFormToApp(
-  {
-    screenData,
-    setScreenData,
-    screenIdOrder,
-    setScreenIdOrder,
-    nextId,
-    setNextId,
-  }: AddNewScreenFormParam
+  { screenData, setScreenData, screenIdOrder, setScreenIdOrder, nextId, setNextId }: AddNewScreenFormParam,
+  { diagonalUnit = 'in', sizeUnit = 'cm' }: { diagonalUnit: AvailableUnits, sizeUnit: AvailableUnits },
 ): void {
   const id = nextId;
   setNextId(nextId + 1);
 
   const newScreenFormProps: ScreenFormProps = {
     id,
+    diagonalUnit,
+    sizeUnit,
     width: '',
     height: '',
     diagonal: '',
@@ -77,10 +80,23 @@ const addNewScreenForm = function addNewScreenFormToApp(
   setScreenIdOrder(nextScreenIdOrder);
 };
 
+const toFixedWithoutTrailingZero = function toFixedWithoutTrailingZero(value: number, length: number): string {
+  const integerPart: number = Math.floor(value);
+  if (integerPart === value) {
+    return value.toString();
+  }
+
+  const integerLength: number = integerPart.toString().length;
+  const mantissaLength: number = length - integerLength - 1;
+  return value.toFixed(mantissaLength).replace(/\.?0+$/, '');
+};
+
 function App() {
   const [ screenData, setScreenData ] = useState<ScreenFormData>({});
   const [ screenIdOrder, setScreenIdOrder ] = useState<number[]>([]);
-  const [ nextId, setNextId ] = useState(0);
+  const [ nextId, setNextId ] = useState<number>(0);
+  const [ diagonalUnit, setDiagonalUnit ] = useState<AvailableUnits>('in');
+  const [ sizeUnit, setSizeUnit ] = useState<AvailableUnits>('cm');
 
   const handleCopyClick = function handleCopyAsYamlClick(): void {
     copyToClipboard(getWholeYaml(screenIdOrder.map((id) => screenData[id])));
@@ -88,7 +104,8 @@ function App() {
 
   const handleAddClick = function handleAddNewScreenFormClick(): void {
     addNewScreenForm(
-      { screenData, setScreenData, screenIdOrder, setScreenIdOrder, nextId, setNextId }
+      { screenData, setScreenData, screenIdOrder, setScreenIdOrder, nextId, setNextId },
+      { diagonalUnit, sizeUnit },
     );
   };
 
@@ -108,6 +125,47 @@ function App() {
 
     const nextScreenIdOrder: number[] = screenIdOrder.filter((value) => value !== id);
     setScreenIdOrder(nextScreenIdOrder);
+  };
+
+  const handleDiagonalUnitChange = function handleDiagonalUnitToggleChange(checked: boolean): void {
+    const nextUnit: AvailableUnits = checked ? 'in' : 'cm';
+    setDiagonalUnit(nextUnit);
+
+    const nextScreenData: ScreenFormData = {};
+
+    for (const id of screenIdOrder) {
+      const parsedDiagonal: number | null = tryParsePositiveFloat(screenData[id]?.diagonal);
+      if (typeof parsedDiagonal === 'number') {
+        nextScreenData[id] = {
+          ...screenData[id],
+          diagonal: nextUnit === 'in'
+            ? toFixedWithoutTrailingZero(toInches(parsedDiagonal), 6)
+            : toFixedWithoutTrailingZero(toCentimeters(parsedDiagonal), 6),
+          diagonalUnit: nextUnit,
+        };
+      } else {
+        nextScreenData[id] = {
+          ...screenData[id],
+          diagonalUnit: nextUnit,
+        };
+      }
+    }
+    setScreenData(nextScreenData);
+  };
+
+  const handleSizeUnitChange = function handleSizeUnitToggleChange(checked: boolean): void {
+    const nextUnit: AvailableUnits = checked ? 'in' : 'cm';
+    setSizeUnit(nextUnit);
+
+    const nextScreenData: ScreenFormData = {};
+
+    for (const id of screenIdOrder) {
+      nextScreenData[id] = {
+        ...screenData[id],
+        sizeUnit: nextUnit,
+      };
+    }
+    setScreenData(nextScreenData);
   };
 
   const screenForms = screenIdOrder.map((id) => (
@@ -150,6 +208,40 @@ function App() {
           </button>
         </div>
       </main>
+
+      <footer className="App-footer">
+        <h2 className="App-footer-title">
+          Options
+        </h2>
+        <ul className="App-footer-config">
+          <li className="App-footer-config-list">
+            <span className="App-footer-config-key">
+              Width/Height
+            </span>
+            <span className="App-footer-config-value">
+              <ToggleSwitch
+                checkedSideLabel="in"
+                uncheckedSideLabel="cm"
+                checked={sizeUnit === 'in'}
+                onChange={handleSizeUnitChange}
+              />
+            </span>
+          </li>
+          <li className="App-footer-config-list">
+            <span className="App-footer-config-key">
+              Diagonal
+            </span>
+            <span className="App-footer-config-value">
+              <ToggleSwitch
+                checkedSideLabel="in"
+                uncheckedSideLabel="cm"
+                checked={diagonalUnit === 'in'}
+                onChange={handleDiagonalUnitChange}
+              />
+            </span>
+          </li>
+        </ul>
+      </footer>
     </div>
   );
 }

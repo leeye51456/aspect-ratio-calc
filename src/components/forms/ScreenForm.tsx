@@ -2,11 +2,15 @@ import React, { useEffect, useRef } from 'react';
 import ScreenFormBg from './ScreenFormBg';
 import copyToClipboard from '../../utils/copyToClipboard';
 import {
+  AvailableUnits,
   getScreenInfo,
   RectSize,
   ScreenInfo,
   ScreenInfoBase,
-  ScreenInfoWithDiagonal
+  ScreenInfoWithDiagonal,
+  toCentimeters,
+  toInches,
+  tryParsePositiveFloat,
 } from '../../utils/ScreenInfo';
 import { getAspectRatioString } from '../../utils/getAspectRatioString';
 import icons from '../common/icons';
@@ -26,6 +30,8 @@ export interface ScreenFormProps {
   width: string,
   height: string,
   diagonal: string,
+  diagonalUnit: AvailableUnits,
+  sizeUnit: AvailableUnits,
   onChange: (id: number, changed: ScreenFormChangedProps) => void,
   onRemove: (id: number) => void,
 };
@@ -83,8 +89,18 @@ function ScreenForm(props: ScreenFormProps) {
   const heightInputRef = useRef<HTMLInputElement>(null);
   const diagonalInputRef = useRef<HTMLInputElement>(null);
 
-  const { width, height, diagonal }: ScreenFormProps = props;
-  const screenInfo: ScreenInfo | null = getScreenInfo(width, height, diagonal);
+  const { width, height, diagonal, diagonalUnit, sizeUnit }: ScreenFormProps = props;
+  const floatDiagonal: number | null = tryParsePositiveFloat(diagonal);
+  let otherDiagonal: string = '-';
+  if (floatDiagonal) {
+    if (diagonalUnit === 'in') {
+      otherDiagonal = `${toCentimeters(floatDiagonal).toFixed(2)}cm`;
+    } else {
+      otherDiagonal = `${toInches(floatDiagonal).toFixed(2)}"`;
+    }
+  }
+
+  const screenInfo: ScreenInfo | null = getScreenInfo(width, height, diagonal, diagonalUnit);
 
   let ratio: number | null = null;
   let dpi: number | null = null;
@@ -93,6 +109,12 @@ function ScreenForm(props: ScreenFormProps) {
   let totalPixels: number | null = null;
   if (screenInfo instanceof ScreenInfoWithDiagonal) {
     ({ ratio, dpi, dotPitch, size, pixelCount: { total: totalPixels } } = screenInfo);
+    if (sizeUnit === 'in') {
+      size = {
+        width: toInches(size.width),
+        height: toInches(size.height),
+      };
+    }
   } else if (screenInfo instanceof ScreenInfoBase) {
     ({ ratio, pixelCount: { total: totalPixels } } = screenInfo);
   }
@@ -103,14 +125,12 @@ function ScreenForm(props: ScreenFormProps) {
 
   const handleRotateClick = function changeSelfRotated() {
     props.onChange(props.id, {
-      width: props.height,
-      height: props.width,
+      width: height,
+      height: width,
     });
   };
 
   const handleCopyClick = function copySelf() {
-    const { width, height, diagonal }: ScreenFormProps = props;
-    const screenInfo: ScreenInfo | null = getScreenInfo(width, height, diagonal);
     if (screenInfo !== null) {
       copyToClipboard(`${screenInfo.toYaml()}\n`);
     }
@@ -168,9 +188,7 @@ function ScreenForm(props: ScreenFormProps) {
         </button>
       </div>
 
-      <div
-        className="ScreenForm-screen"
-      >
+      <div className="ScreenForm-screen">
         <div
           className="ScreenForm-ratio"
           style={ratioStyle}
@@ -178,7 +196,10 @@ function ScreenForm(props: ScreenFormProps) {
 
         <div className="ScreenForm-content">
           <div className="ScreenForm-bg">
-            <ScreenFormBg width={getFormWidth(renderedRatio)} height={getFormHeight(renderedRatio)} />
+            <ScreenFormBg
+              width={getFormWidth(renderedRatio)}
+              height={getFormHeight(renderedRatio)}
+            />
           </div>
 
           <div className="ScreenForm-grid">
@@ -188,7 +209,7 @@ function ScreenForm(props: ScreenFormProps) {
                   ref={widthInputRef}
                   className="ScreenForm-input"
                   type="text"
-                  value={props.width}
+                  value={width}
                   inputMode="numeric"
                   title="Width"
                   onChange={handleInputChangeWith('width')}
@@ -196,7 +217,7 @@ function ScreenForm(props: ScreenFormProps) {
                 />&nbsp;px
               </li>
               <li>
-                {size ? `${size.width.toFixed(2)}cm` : '-'}
+                {size ? `${size.width.toFixed(2)}${sizeUnit === 'in' ? '"' : sizeUnit}` : '-'}
               </li>
             </ul>
             <ul className="ScreenForm-grid-item ScreenForm-height">
@@ -205,7 +226,7 @@ function ScreenForm(props: ScreenFormProps) {
                   ref={heightInputRef}
                   className="ScreenForm-input"
                   type="text"
-                  value={props.height}
+                  value={height}
                   inputMode="numeric"
                   title="Height"
                   onChange={handleInputChangeWith('height')}
@@ -213,7 +234,7 @@ function ScreenForm(props: ScreenFormProps) {
                 />&nbsp;px
               </li>
               <li>
-                {size ? `${size.height.toFixed(2)}cm` : '-'}
+                {size ? `${size.height.toFixed(2)}${sizeUnit === 'in' ? '"' : sizeUnit}` : '-'}
               </li>
             </ul>
             <ul className="ScreenForm-grid-item ScreenForm-diagonal">
@@ -222,12 +243,15 @@ function ScreenForm(props: ScreenFormProps) {
                   ref={diagonalInputRef}
                   className="ScreenForm-input"
                   type="text"
-                  value={props.diagonal}
+                  value={diagonal}
                   inputMode="decimal"
                   title="Diagonal"
                   onChange={handleInputChangeWith('diagonal')}
                   onBlur={handleInputBlur}
-                />&nbsp;in
+                />&nbsp;{diagonalUnit}
+              </li>
+              <li>
+                {otherDiagonal}
               </li>
             </ul>
           </div>

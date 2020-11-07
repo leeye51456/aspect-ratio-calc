@@ -1,5 +1,7 @@
 import getAspectRatioString from './getAspectRatioString';
 
+export type AvailableUnits = 'cm' | 'in';
+
 export interface PixelCount {
   readonly width: number,
   readonly height: number,
@@ -12,6 +14,14 @@ export interface RectSize {
 };
 
 const INCH_TO_CENTIMETER_FACTOR: number = 2.54;
+
+export const toInches = function convertCentimetersToInches(centimeters: number): number {
+  return centimeters / INCH_TO_CENTIMETER_FACTOR;
+};
+
+export const toCentimeters = function convertInchesToCentimeters(inches: number): number {
+  return inches * INCH_TO_CENTIMETER_FACTOR;
+};
 
 export class ScreenInfoBase {
   protected map: Map<string, string> | null;
@@ -66,7 +76,7 @@ export class ScreenInfoWithDiagonal extends ScreenInfoBase {
 
     this.diagonal = diagonal;
     this.dpi = Math.sqrt(this.pixelCount.width ** 2 + this.pixelCount.height ** 2) / diagonal;
-    this.dotPitch = 10 * INCH_TO_CENTIMETER_FACTOR / this.dpi;
+    this.dotPitch = 10 * toCentimeters(1 / this.dpi);
     this.size = {
       width: this.pixelCount.width * this.dotPitch / 10,
       height: this.pixelCount.height * this.dotPitch / 10,
@@ -93,10 +103,25 @@ export class ScreenInfoWithDiagonal extends ScreenInfoBase {
   }
 };
 
+export const tryParsePositiveFloat = function parsePositiveFloatOrGetNull(value?: string | number): number | null {
+  if (typeof value === 'number') {
+    if (isFinite(value) && value > 0) {
+      return value;
+    }
+  } else if (typeof value === 'string') {
+    const parsed = parseFloat(value);
+    if (isFinite(parsed) && parsed > 0) {
+      return parsed;
+    }
+  }
+  return null;
+};
+
 export const getScreenInfo = function getScreenInfoFrom(
   width: number | string,
   height: number | string,
   diagonal?: number | string,
+  diagonalUnit?: AvailableUnits,
 ) : ScreenInfo | null {
   const integerWidth: number = typeof width === 'number' ? Math.floor(width) : parseInt(width, 10);
   const integerHeight: number = typeof height === 'number' ? Math.floor(height) : parseInt(height, 10);
@@ -110,16 +135,9 @@ export const getScreenInfo = function getScreenInfoFrom(
     return null;
   }
 
-  let floatDiagonal: number | null = null;
-  if (typeof diagonal === 'number') {
-    if (isFinite(diagonal) && diagonal > 0) {
-      floatDiagonal = diagonal;
-    }
-  } else if (typeof diagonal === 'string') {
-    const parsed = parseFloat(diagonal);
-    if (isFinite(parsed) && parsed > 0) {
-      floatDiagonal = parsed;
-    }
+  let floatDiagonal: number | null = tryParsePositiveFloat(diagonal);
+  if (floatDiagonal && diagonalUnit && diagonalUnit === 'cm') {
+    floatDiagonal /= INCH_TO_CENTIMETER_FACTOR;
   }
 
   if (floatDiagonal === null) {

@@ -51,6 +51,37 @@
     @apply w-full;
   }
 
+  .App-footer {
+    @apply row-start-3 col-start-2;
+    @apply mx-defaultgap mb-defaultgap;
+    @apply border-t border-gray-400;
+    @apply px-1 pt-3;
+  }
+
+  .App-footer-title {
+    @apply mb-1;
+    @apply text-lg font-bold;
+  }
+
+  .App-footer-config-list {
+    @apply flex;
+    @apply border-b;
+    @apply py-1;
+    @apply max-w-content;
+  }
+
+  .App-footer-config-list:last-child {
+    @apply border-none;
+  }
+
+  .App-footer-config-key {
+    @apply flex-1;
+  }
+
+  .App-footer-config-value {
+    @apply flex-grow-0;
+  }
+
   @screen sm {
     .App {
       @apply grid-cols-app-1;
