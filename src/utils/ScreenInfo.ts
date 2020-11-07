@@ -101,6 +101,20 @@ export class ScreenInfoWithDiagonal extends ScreenInfoBase {
   }
 };
 
+export const tryParsePositiveFloat = function parsePositiveFloatOrGetNull(value?: string | number): number | null {
+  if (typeof value === 'number') {
+    if (isFinite(value) && value > 0) {
+      return value;
+    }
+  } else if (typeof value === 'string') {
+    const parsed = parseFloat(value);
+    if (isFinite(parsed) && parsed > 0) {
+      return parsed;
+    }
+  }
+  return null;
+};
+
 export const getScreenInfo = function getScreenInfoFrom(
   width: number | string,
   height: number | string,
@@ -118,17 +132,7 @@ export const getScreenInfo = function getScreenInfoFrom(
     return null;
   }
 
-  let floatDiagonal: number | null = null;
-  if (typeof diagonal === 'number') {
-    if (isFinite(diagonal) && diagonal > 0) {
-      floatDiagonal = diagonal;
-    }
-  } else if (typeof diagonal === 'string') {
-    const parsed = parseFloat(diagonal);
-    if (isFinite(parsed) && parsed > 0) {
-      floatDiagonal = parsed;
-    }
-  }
+  let floatDiagonal: number | null = tryParsePositiveFloat(diagonal);
 
   if (floatDiagonal === null) {
     return new ScreenInfoBase(integerWidth, integerHeight);
