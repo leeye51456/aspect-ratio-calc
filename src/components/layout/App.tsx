@@ -1,12 +1,13 @@
 import React, { useState } from 'react';
 import copyToClipboard from '../../utils/copyToClipboard';
 import {
-  AvailableUnits,
+  AvailableUnit,
   getScreenInfo,
   ScreenInfo,
   toCentimeters,
   toInches,
   tryParsePositiveFloat,
+  UnitOptions,
 } from '../../utils/ScreenInfo';
 import ReactSetState from '../../utils/ReactSetState';
 import ScreenForm, { ScreenFormChangedProps } from '../forms/ScreenForm';
@@ -14,17 +15,17 @@ import ToggleSwitch from '../forms/ToggleSwitch';
 import icons from '../common/icons';
 import './App.css';
 
-interface ScreenFormProps {
+interface StoredScreenFormProps {
   id: number,
   width: string,
   height: string,
   diagonal: string,
-  diagonalUnit: AvailableUnits,
-  sizeUnit: AvailableUnits,
+  diagonalUnit: AvailableUnit,
+  sizeUnit: AvailableUnit,
 }
 
 interface ScreenFormData {
-  [id: number]: ScreenFormProps,
+  [id: number]: StoredScreenFormProps,
 }
 
 interface AddNewScreenFormParam {
@@ -36,16 +37,22 @@ interface AddNewScreenFormParam {
   setNextId: ReactSetState<number>,
 }
 
-const buildScreenInfoYamlEntry = function buildScreenInfoYamlEntryOfArray(screenInfo: ScreenInfo): string {
-  const map = screenInfo.toMap();
+const buildScreenInfoYamlEntry = function buildScreenInfoYamlEntryOfArray(
+  screenInfo: ScreenInfo,
+  options: UnitOptions,
+): string {
+  const map = screenInfo.toMap(options);
   return '- ' + Array.from(map.keys()).map((key) => `${key}: ${map.get(key)}`).join('\n  ');
 };
 
-const getWholeYaml = function getWholeYamlFromScreenFormData(screenFormData: ScreenFormProps[]): string {
+const getWholeYaml = function getWholeYamlFromScreenFormData(
+  screenFormData: StoredScreenFormProps[],
+  options: UnitOptions = { diagonalUnit: 'in', sizeUnit: 'cm' },
+): string {
   const screens: ScreenInfo[] = screenFormData.reduce<ScreenInfo[]>(
-    (acc: ScreenInfo[], props: ScreenFormProps) => {
-      const { width, height, diagonal }: ScreenFormProps = props;
-      const screenInfo: ScreenInfo | null = getScreenInfo(width, height, diagonal);
+    (acc: ScreenInfo[], props: StoredScreenFormProps) => {
+      const { width, height, diagonal }: StoredScreenFormProps = props;
+      const screenInfo: ScreenInfo | null = getScreenInfo(width, height, diagonal, options.diagonalUnit);
       if (screenInfo !== null) {
         acc.push(screenInfo);
       }
@@ -53,18 +60,18 @@ const getWholeYaml = function getWholeYamlFromScreenFormData(screenFormData: Scr
     },
     []
   );
-  const yamls: string[] = screens.map((screen: ScreenInfo) => buildScreenInfoYamlEntry(screen));
+  const yamls: string[] = screens.map((screen: ScreenInfo) => buildScreenInfoYamlEntry(screen, options));
   return yamls.join('\n\n') + '\n';
 };
 
 const addNewScreenForm = function addNewScreenFormToApp(
   { screenData, setScreenData, screenIdOrder, setScreenIdOrder, nextId, setNextId }: AddNewScreenFormParam,
-  { diagonalUnit = 'in', sizeUnit = 'cm' }: { diagonalUnit: AvailableUnits, sizeUnit: AvailableUnits },
+  { diagonalUnit = 'in', sizeUnit = 'cm' }: UnitOptions,
 ): void {
   const id = nextId;
   setNextId(nextId + 1);
 
-  const newScreenFormProps: ScreenFormProps = {
+  const newScreenFormProps: StoredScreenFormProps = {
     id,
     diagonalUnit,
     sizeUnit,
@@ -95,11 +102,11 @@ function App() {
   const [ screenData, setScreenData ] = useState<ScreenFormData>({});
   const [ screenIdOrder, setScreenIdOrder ] = useState<number[]>([]);
   const [ nextId, setNextId ] = useState<number>(0);
-  const [ diagonalUnit, setDiagonalUnit ] = useState<AvailableUnits>('in');
-  const [ sizeUnit, setSizeUnit ] = useState<AvailableUnits>('cm');
+  const [ diagonalUnit, setDiagonalUnit ] = useState<AvailableUnit>('in');
+  const [ sizeUnit, setSizeUnit ] = useState<AvailableUnit>('cm');
 
   const handleCopyClick = function handleCopyAsYamlClick(): void {
-    copyToClipboard(getWholeYaml(screenIdOrder.map((id) => screenData[id])));
+    copyToClipboard(getWholeYaml(screenIdOrder.map((id) => screenData[id]), { diagonalUnit, sizeUnit }));
   };
 
   const handleAddClick = function handleAddNewScreenFormClick(): void {
@@ -113,7 +120,7 @@ function App() {
     id: number,
     changed: ScreenFormChangedProps,
   ): void {
-    const nextScreenFormProps: ScreenFormProps = { ...screenData[id], ...changed };
+    const nextScreenFormProps: StoredScreenFormProps = { ...screenData[id], ...changed };
     const nextScreenData: ScreenFormData = { ...screenData, [id]: nextScreenFormProps };
     setScreenData(nextScreenData);
   };
@@ -128,7 +135,7 @@ function App() {
   };
 
   const handleDiagonalUnitChange = function handleDiagonalUnitToggleChange(checked: boolean): void {
-    const nextUnit: AvailableUnits = checked ? 'in' : 'cm';
+    const nextUnit: AvailableUnit = checked ? 'in' : 'cm';
     setDiagonalUnit(nextUnit);
 
     const nextScreenData: ScreenFormData = {};
@@ -154,7 +161,7 @@ function App() {
   };
 
   const handleSizeUnitChange = function handleSizeUnitToggleChange(checked: boolean): void {
-    const nextUnit: AvailableUnits = checked ? 'in' : 'cm';
+    const nextUnit: AvailableUnit = checked ? 'in' : 'cm';
     setSizeUnit(nextUnit);
 
     const nextScreenData: ScreenFormData = {};

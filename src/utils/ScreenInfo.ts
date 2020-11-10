@@ -1,6 +1,11 @@
 import getAspectRatioString from './getAspectRatioString';
 
-export type AvailableUnits = 'cm' | 'in';
+export type AvailableUnit = 'cm' | 'in';
+
+export interface UnitOptions {
+  diagonalUnit?: AvailableUnit,
+  sizeUnit?: AvailableUnit,
+};
 
 export interface PixelCount {
   readonly width: number,
@@ -42,7 +47,7 @@ export class ScreenInfoBase {
     this.map = null;
   }
 
-  toMap = (): Map<string, string> => {
+  toMap = (options?: UnitOptions): Map<string, string> => {
     if (this.map) {
       return this.map;
     }
@@ -57,8 +62,8 @@ export class ScreenInfoBase {
     return newMap;
   }
 
-  toYaml = (): string => {
-    const map = this.toMap();
+  toYaml = (options?: UnitOptions): string => {
+    const map = this.toMap(options);
     return Array.from(map.keys())
       .map((key) => `${key}: ${map.get(key)}`)
       .join('\n');
@@ -83,19 +88,35 @@ export class ScreenInfoWithDiagonal extends ScreenInfoBase {
     };
   }
 
-  toMap = (): Map<string, string> => {
+  toMap = (options?: UnitOptions): Map<string, string> => {
     if (this.map) {
       return this.map;
+    }
+
+    let diagonalUnit: AvailableUnit = 'in';
+    let sizeUnit: AvailableUnit = 'cm';
+    if (options) {
+      ({ diagonalUnit = 'in', sizeUnit = 'cm' } = options);
     }
 
     const { pixelCount, diagonal, ratio, dpi, dotPitch, size }: ScreenInfoWithDiagonal = this;
     const newMap = new Map();
     newMap.set('Screen', `${pixelCount.width} x ${pixelCount.height}`);
-    newMap.set('Diagonal', `${diagonal}"`);
+    newMap.set(
+      'Diagonal',
+      diagonalUnit === 'cm'
+        ? `${toCentimeters(diagonal)} cm`
+        : `${diagonal}"`
+    );
     newMap.set('AspectRatio', `${ratio.toFixed(2)}:1 (${getAspectRatioString(ratio)})`);
     newMap.set('DPI', `${dpi.toFixed(2)}`);
     newMap.set('DotPitch', `${dotPitch.toFixed(4)}`);
-    newMap.set('Size', `${size.width.toFixed(2)} cm x ${size.height.toFixed(2)} cm`);
+    newMap.set(
+      'Size',
+      sizeUnit === 'cm'
+        ? `${size.width.toFixed(2)} cm x ${size.height.toFixed(2)} cm`
+        : `${toInches(size.width).toFixed(2)}" x ${toInches(size.height).toFixed(2)}"`
+    );
     newMap.set('PixelCount', `${pixelCount.total}`);
     this.map = newMap;
 
@@ -121,7 +142,7 @@ export const getScreenInfo = function getScreenInfoFrom(
   width: number | string,
   height: number | string,
   diagonal?: number | string,
-  diagonalUnit?: AvailableUnits,
+  diagonalUnit?: AvailableUnit,
 ) : ScreenInfo | null {
   const integerWidth: number = typeof width === 'number' ? Math.floor(width) : parseInt(width, 10);
   const integerHeight: number = typeof height === 'number' ? Math.floor(height) : parseInt(height, 10);

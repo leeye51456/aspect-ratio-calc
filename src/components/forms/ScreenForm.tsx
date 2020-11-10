@@ -2,7 +2,7 @@ import React, { useEffect, useRef } from 'react';
 import ScreenFormBg from './ScreenFormBg';
 import copyToClipboard from '../../utils/copyToClipboard';
 import {
-  AvailableUnits,
+  AvailableUnit,
   getScreenInfo,
   RectSize,
   ScreenInfo,
@@ -30,13 +30,13 @@ export interface ScreenFormProps {
   width: string,
   height: string,
   diagonal: string,
-  diagonalUnit: AvailableUnits,
-  sizeUnit: AvailableUnits,
+  diagonalUnit: AvailableUnit,
+  sizeUnit: AvailableUnit,
   onChange: (id: number, changed: ScreenFormChangedProps) => void,
   onRemove: (id: number) => void,
 };
 
-const { ratio: defaultDisplayedRatio }: { ratio: number } = getScreenInfo(1920, 1080, 24) as ScreenInfoWithDiagonal;
+const { ratio: defaultDisplayedRatio }: { ratio: number } = getScreenInfo(1920, 1080) as ScreenInfoBase;
 
 const maxWidth: number = 360;
 
@@ -132,7 +132,7 @@ function ScreenForm(props: ScreenFormProps) {
 
   const handleCopyClick = function copySelf() {
     if (screenInfo !== null) {
-      copyToClipboard(`${screenInfo.toYaml()}\n`);
+      copyToClipboard(`${screenInfo.toYaml({ diagonalUnit, sizeUnit })}\n`);
     }
   }
 
