@@ -1,5 +1,12 @@
 import getAspectRatioString from './getAspectRatioString';
 
+export type AvailableUnit = 'cm' | 'in';
+
+export interface UnitOptions {
+  diagonalUnit?: AvailableUnit,
+  sizeUnit?: AvailableUnit,
+};
+
 export interface PixelCount {
   readonly width: number,
   readonly height: number,
@@ -12,6 +19,14 @@ export interface RectSize {
 };
 
 const INCH_TO_CENTIMETER_FACTOR: number = 2.54;
+
+export const toInches = function convertCentimetersToInches(centimeters: number): number {
+  return centimeters / INCH_TO_CENTIMETER_FACTOR;
+};
+
+export const toCentimeters = function convertInchesToCentimeters(inches: number): number {
+  return inches * INCH_TO_CENTIMETER_FACTOR;
+};
 
 export class ScreenInfoBase {
   protected map: Map<string, string> | null;
@@ -32,7 +47,7 @@ export class ScreenInfoBase {
     this.map = null;
   }
 
-  toMap = (): Map<string, string> => {
+  toMap = (options?: UnitOptions): Map<string, string> => {
     if (this.map) {
       return this.map;
     }
@@ -47,8 +62,8 @@ export class ScreenInfoBase {
     return newMap;
   }
 
-  toYaml = (): string => {
-    const map = this.toMap();
+  toYaml = (options?: UnitOptions): string => {
+    const map = this.toMap(options);
     return Array.from(map.keys())
       .map((key) => `${key}: ${map.get(key)}`)
       .join('\n');
@@ -66,26 +81,42 @@ export class ScreenInfoWithDiagonal extends ScreenInfoBase {
 
     this.diagonal = diagonal;
     this.dpi = Math.sqrt(this.pixelCount.width ** 2 + this.pixelCount.height ** 2) / diagonal;
-    this.dotPitch = 10 * INCH_TO_CENTIMETER_FACTOR / this.dpi;
+    this.dotPitch = 10 * toCentimeters(1 / this.dpi);
     this.size = {
       width: this.pixelCount.width * this.dotPitch / 10,
       height: this.pixelCount.height * this.dotPitch / 10,
     };
   }
 
-  toMap = (): Map<string, string> => {
+  toMap = (options?: UnitOptions): Map<string, string> => {
     if (this.map) {
       return this.map;
+    }
+
+    let diagonalUnit: AvailableUnit = 'in';
+    let sizeUnit: AvailableUnit = 'cm';
+    if (options) {
+      ({ diagonalUnit = 'in', sizeUnit = 'cm' } = options);
     }
 
     const { pixelCount, diagonal, ratio, dpi, dotPitch, size }: ScreenInfoWithDiagonal = this;
     const newMap = new Map();
     newMap.set('Screen', `${pixelCount.width} x ${pixelCount.height}`);
-    newMap.set('Diagonal', `${diagonal}"`);
+    newMap.set(
+      'Diagonal',
+      diagonalUnit === 'cm'
+        ? `${toCentimeters(diagonal)} cm`
+        : `${diagonal}"`
+    );
     newMap.set('AspectRatio', `${ratio.toFixed(2)}:1 (${getAspectRatioString(ratio)})`);
     newMap.set('DPI', `${dpi.toFixed(2)}`);
     newMap.set('DotPitch', `${dotPitch.toFixed(4)}`);
-    newMap.set('Size', `${size.width.toFixed(2)} cm x ${size.height.toFixed(2)} cm`);
+    newMap.set(
+      'Size',
+      sizeUnit === 'cm'
+        ? `${size.width.toFixed(2)} cm x ${size.height.toFixed(2)} cm`
+        : `${toInches(size.width).toFixed(2)}" x ${toInches(size.height).toFixed(2)}"`
+    );
     newMap.set('PixelCount', `${pixelCount.total}`);
     this.map = newMap;
 
@@ -93,10 +124,25 @@ export class ScreenInfoWithDiagonal extends ScreenInfoBase {
   }
 };
 
+export const tryParsePositiveFloat = function parsePositiveFloatOrGetNull(value?: string | number): number | null {
+  if (typeof value === 'number') {
+    if (isFinite(value) && value > 0) {
+      return value;
+    }
+  } else if (typeof value === 'string') {
+    const parsed = parseFloat(value);
+    if (isFinite(parsed) && parsed > 0) {
+      return parsed;
+    }
+  }
+  return null;
+};
+
 export const getScreenInfo = function getScreenInfoFrom(
   width: number | string,
   height: number | string,
   diagonal?: number | string,
+  diagonalUnit?: AvailableUnit,
 ) : ScreenInfo | null {
   const integerWidth: number = typeof width === 'number' ? Math.floor(width) : parseInt(width, 10);
   const integerHeight: number = typeof height === 'number' ? Math.floor(height) : parseInt(height, 10);
@@ -110,16 +156,9 @@ export const getScreenInfo = function getScreenInfoFrom(
     return null;
   }
 
-  let floatDiagonal: number | null = null;
-  if (typeof diagonal === 'number') {
-    if (isFinite(diagonal) && diagonal > 0) {
-      floatDiagonal = diagonal;
-    }
-  } else if (typeof diagonal === 'string') {
-    const parsed = parseFloat(diagonal);
-    if (isFinite(parsed) && parsed > 0) {
-      floatDiagonal = parsed;
-    }
+  let floatDiagonal: number | null = tryParsePositiveFloat(diagonal);
+  if (floatDiagonal && diagonalUnit && diagonalUnit === 'cm') {
+    floatDiagonal /= INCH_TO_CENTIMETER_FACTOR;
   }
 
   if (floatDiagonal === null) {

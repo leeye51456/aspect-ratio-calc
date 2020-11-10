@@ -12,14 +12,16 @@ test('components/layout/App: Render App component', () => {
   const headerTitle: HTMLElement = renderedComponent.getByText(/aspect ratio calculator/i);
   expect(headerTitle).toBeInTheDocument();
 
-  const button: HTMLElement = renderedComponent.getByText(/^add$/i);
-  expect(button).toBeInTheDocument();
+  const copyButton: HTMLElement = renderedComponent.getByAltText(/^copy all$/i);
+  const addButton: HTMLElement = renderedComponent.getByAltText(/^add$/i);
+  expect(copyButton).toBeInTheDocument();
+  expect(addButton).toBeInTheDocument();
 });
 
 test('components/layout/App: Click add button', () => {
   const renderedComponent: RenderResult = render(<App />);
 
-  const addButton: HTMLElement = renderedComponent.getByText(/^add$/i);
+  const addButton: HTMLElement = renderedComponent.getByAltText(/^add$/i);
   expect(addButton).toBeInTheDocument();
 
   userEvent.click(addButton);

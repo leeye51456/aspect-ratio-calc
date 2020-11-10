@@ -1,0 +1,41 @@
+@layer components {
+  .ToggleSwitch {
+    @apply inline-flex items-center;
+    @apply mx-1;
+  }
+
+  .ToggleSwitch:focus-within {
+    @apply shadow-outline;
+  }
+
+  .ToggleSwitch-label {
+    @apply inline-block;
+    @apply mx-1;
+  }
+
+  .ToggleSwitch-checkbox {
+    @apply w-0 h-0;
+  }
+
+  .ToggleSwitch-switch {
+    @apply inline-block;
+    @apply mx-1;
+    @apply rounded-full;
+    @apply w-10 h-5;
+    @apply bg-teal-200;
+    @apply shadow;
+  }
+
+  .ToggleSwitch-switch-knob {
+    @apply inline-block;
+    @apply rounded-full;
+    @apply w-5 h-5;
+    @apply bg-teal-400;
+    @apply shadow;
+    @apply transition-transform duration-150 ease-out;
+  }
+
+  .ToggleSwitch-checkbox:checked + .ToggleSwitch-switch > .ToggleSwitch-switch-knob {
+    @apply transform translate-x-5;
+  }
+}

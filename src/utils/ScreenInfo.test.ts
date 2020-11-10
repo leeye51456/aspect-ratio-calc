@@ -1,31 +1,6 @@
-import {
-  ScreenInfo,
-  getScreenInfo,
-  ScreenInfoWithDiagonal,
-  ScreenInfoBase
-} from './ScreenInfo';
+import { ScreenInfo, getScreenInfo, ScreenInfoWithDiagonal, ScreenInfoBase } from './ScreenInfo';
 
 type Returned = ScreenInfo | null;
-
-test('utils/ScreenInfo: User defined type guard', () => {
-  const withDiagonal: ScreenInfoWithDiagonal = {
-    pixelCount: { width: 1, height: 1, total: 1 },
-    ratio: 1,
-    diagonal: 1,
-    dpi: 1,
-    dotPitch: 1,
-    size: { width: 1, height: 1 },
-  };
-  expect(withDiagonal instanceof ScreenInfoWithDiagonal).toBe(true);
-  expect(withDiagonal instanceof ScreenInfoBase).toBe(false);
-
-  const withoutDiagonal: ScreenInfoBase = {
-    pixelCount: { width: 1, height: 1, total: 1 },
-    ratio: 1,
-  };
-  expect(withoutDiagonal instanceof ScreenInfoWithDiagonal).toBe(false);
-  expect(withoutDiagonal instanceof ScreenInfoBase).toBe(true);
-});
 
 test('utils/ScreenInfo: Invalid parameter', () => {
   const passUnparsableWidth: Returned = getScreenInfo('width', 1, 1);
