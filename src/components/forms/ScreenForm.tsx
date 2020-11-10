@@ -132,7 +132,7 @@ function ScreenForm(props: ScreenFormProps) {
 
   const handleCopyClick = function copySelf() {
     if (screenInfo !== null) {
-      copyToClipboard(`${screenInfo.toYaml()}\n`);
+      copyToClipboard(`${screenInfo.toYaml({ diagonalUnit, sizeUnit })}\n`);
     }
   }
 

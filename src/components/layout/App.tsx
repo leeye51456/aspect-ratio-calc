@@ -7,6 +7,7 @@ import {
   toCentimeters,
   toInches,
   tryParsePositiveFloat,
+  UnitOptions,
 } from '../../utils/ScreenInfo';
 import ReactSetState from '../../utils/ReactSetState';
 import ScreenForm, { ScreenFormChangedProps } from '../forms/ScreenForm';
@@ -36,16 +37,22 @@ interface AddNewScreenFormParam {
   setNextId: ReactSetState<number>,
 }
 
-const buildScreenInfoYamlEntry = function buildScreenInfoYamlEntryOfArray(screenInfo: ScreenInfo): string {
-  const map = screenInfo.toMap();
+const buildScreenInfoYamlEntry = function buildScreenInfoYamlEntryOfArray(
+  screenInfo: ScreenInfo,
+  options: UnitOptions,
+): string {
+  const map = screenInfo.toMap(options);
   return '- ' + Array.from(map.keys()).map((key) => `${key}: ${map.get(key)}`).join('\n  ');
 };
 
-const getWholeYaml = function getWholeYamlFromScreenFormData(screenFormData: StoredScreenFormProps[]): string {
+const getWholeYaml = function getWholeYamlFromScreenFormData(
+  screenFormData: StoredScreenFormProps[],
+  options: UnitOptions = { diagonalUnit: 'in', sizeUnit: 'cm' },
+): string {
   const screens: ScreenInfo[] = screenFormData.reduce<ScreenInfo[]>(
     (acc: ScreenInfo[], props: StoredScreenFormProps) => {
       const { width, height, diagonal }: StoredScreenFormProps = props;
-      const screenInfo: ScreenInfo | null = getScreenInfo(width, height, diagonal);
+      const screenInfo: ScreenInfo | null = getScreenInfo(width, height, diagonal, options.diagonalUnit);
       if (screenInfo !== null) {
         acc.push(screenInfo);
       }
@@ -53,13 +60,13 @@ const getWholeYaml = function getWholeYamlFromScreenFormData(screenFormData: Sto
     },
     []
   );
-  const yamls: string[] = screens.map((screen: ScreenInfo) => buildScreenInfoYamlEntry(screen));
+  const yamls: string[] = screens.map((screen: ScreenInfo) => buildScreenInfoYamlEntry(screen, options));
   return yamls.join('\n\n') + '\n';
 };
 
 const addNewScreenForm = function addNewScreenFormToApp(
   { screenData, setScreenData, screenIdOrder, setScreenIdOrder, nextId, setNextId }: AddNewScreenFormParam,
-  { diagonalUnit = 'in', sizeUnit = 'cm' }: { diagonalUnit: AvailableUnit, sizeUnit: AvailableUnit },
+  { diagonalUnit = 'in', sizeUnit = 'cm' }: UnitOptions,
 ): void {
   const id = nextId;
   setNextId(nextId + 1);
@@ -99,7 +106,7 @@ function App() {
   const [ sizeUnit, setSizeUnit ] = useState<AvailableUnit>('cm');
 
   const handleCopyClick = function handleCopyAsYamlClick(): void {
-    copyToClipboard(getWholeYaml(screenIdOrder.map((id) => screenData[id])));
+    copyToClipboard(getWholeYaml(screenIdOrder.map((id) => screenData[id]), { diagonalUnit, sizeUnit }));
   };
 
   const handleAddClick = function handleAddNewScreenFormClick(): void {
