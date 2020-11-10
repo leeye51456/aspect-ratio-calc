@@ -1,6 +1,6 @@
 import getAspectRatioString from './getAspectRatioString';
 
-export type AvailableUnits = 'cm' | 'in';
+export type AvailableUnit = 'cm' | 'in';
 
 export interface PixelCount {
   readonly width: number,
@@ -121,7 +121,7 @@ export const getScreenInfo = function getScreenInfoFrom(
   width: number | string,
   height: number | string,
   diagonal?: number | string,
-  diagonalUnit?: AvailableUnits,
+  diagonalUnit?: AvailableUnit,
 ) : ScreenInfo | null {
   const integerWidth: number = typeof width === 'number' ? Math.floor(width) : parseInt(width, 10);
   const integerHeight: number = typeof height === 'number' ? Math.floor(height) : parseInt(height, 10);
