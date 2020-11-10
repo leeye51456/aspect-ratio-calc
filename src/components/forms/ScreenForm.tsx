@@ -36,7 +36,7 @@ export interface ScreenFormProps {
   onRemove: (id: number) => void,
 };
 
-const { ratio: defaultDisplayedRatio }: { ratio: number } = getScreenInfo(1920, 1080, 24) as ScreenInfoWithDiagonal;
+const { ratio: defaultDisplayedRatio }: { ratio: number } = getScreenInfo(1920, 1080) as ScreenInfoBase;
 
 const maxWidth: number = 360;
 
