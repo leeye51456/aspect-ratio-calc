@@ -1,6 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import ScreenFormBg from './ScreenFormBg';
 import copyToClipboard from '../../utils/copyToClipboard';
+import { insertCommas, tryParsePositiveFloat } from '../../utils/number';
 import {
   AvailableUnit,
   getScreenInfo,
@@ -10,7 +11,6 @@ import {
   ScreenInfoWithDiagonal,
   toCentimeters,
   toInches,
-  tryParsePositiveFloat,
 } from '../../utils/ScreenInfo';
 import { getAspectRatioString } from '../../utils/getAspectRatioString';
 import { getSingleYaml } from '../../utils/yaml';
@@ -79,10 +79,6 @@ const getFormHeight = function getFormHeightByPixels(ratio: number): number {
   } else {
     return maxWidth / ratio; // 1 < ratio <= 22:9
   }
-};
-
-const insertCommas = function insertCommasIntoIneger(integer: number): string {
-  return integer.toFixed().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
 };
 
 function ScreenForm(props: ScreenFormProps) {

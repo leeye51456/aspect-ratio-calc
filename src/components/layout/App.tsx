@@ -1,28 +1,17 @@
 import React, { useState } from 'react';
 import useScreenData, { ScreenFormData } from '../../hooks/useScreenData';
 import copyToClipboard from '../../utils/copyToClipboard';
+import { toFixedWithoutTrailingZero, tryParsePositiveFloat } from '../../utils/number';
 import {
   AvailableUnit,
   toCentimeters,
   toInches,
-  tryParsePositiveFloat,
 } from '../../utils/ScreenInfo';
 import { getWholeYaml } from '../../utils/yaml';
 import ScreenForm, { ScreenFormChangedProps } from '../forms/ScreenForm';
 import ToggleSwitch from '../forms/ToggleSwitch';
 import icons from '../common/icons';
 import './App.css';
-
-const toFixedWithoutTrailingZero = function toFixedWithoutTrailingZero(value: number, length: number): string {
-  const integerPart: number = Math.floor(value);
-  if (integerPart === value) {
-    return value.toString();
-  }
-
-  const integerLength: number = integerPart.toString().length;
-  const mantissaLength: number = length - integerLength - 1;
-  return value.toFixed(mantissaLength).replace(/\.?0+$/, '');
-};
 
 function App() {
   const screenData = useScreenData();
