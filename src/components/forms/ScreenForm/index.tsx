@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from 'react';
-import ScreenFormBg from './ScreenFormBg';
-import copyToClipboard from '../../utils/copyToClipboard';
-import { insertCommas, tryParsePositiveFloat } from '../../utils/number';
+import ScreenFormBg from './../ScreenFormBg';
+import copyToClipboard from '../../../utils/copyToClipboard';
+import { insertCommas, tryParsePositiveFloat } from '../../../utils/number';
 import {
   AvailableUnit,
   getScreenInfo,
@@ -11,11 +11,11 @@ import {
   ScreenInfoWithDiagonal,
   toCentimeters,
   toInches,
-} from '../../utils/ScreenInfo';
-import { getAspectRatioString } from '../../utils/getAspectRatioString';
-import { getSingleYaml } from '../../utils/yaml';
-import icons from '../common/icons';
-import './ScreenForm.css';
+} from '../../../utils/ScreenInfo';
+import { getAspectRatioString } from '../../../utils/getAspectRatioString';
+import { getSingleYaml } from '../../../utils/yaml';
+import icons from '../../common/icons';
+import './index.css';
 
 export type ScreenFormPropName = 'width' | 'height' | 'diagonal';
 
