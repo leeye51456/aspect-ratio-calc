@@ -1,4 +1,5 @@
 import getAspectRatioString from './getAspectRatioString';
+import { tryParsePositiveFloat } from './number';
 
 export type AvailableUnit = 'cm' | 'in';
 
@@ -115,20 +116,6 @@ export class ScreenInfoWithDiagonal extends ScreenInfoBase {
 
     return newMap;
   }
-};
-
-export const tryParsePositiveFloat = function parsePositiveFloatOrGetNull(value?: string | number): number | null {
-  if (typeof value === 'number') {
-    if (isFinite(value) && value > 0) {
-      return value;
-    }
-  } else if (typeof value === 'string') {
-    const parsed = parseFloat(value);
-    if (isFinite(parsed) && parsed > 0) {
-      return parsed;
-    }
-  }
-  return null;
 };
 
 export const getScreenInfo = function getScreenInfoFrom(
