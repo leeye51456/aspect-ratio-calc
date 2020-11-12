@@ -61,13 +61,6 @@ export class ScreenInfoBase {
 
     return newMap;
   }
-
-  toYaml = (options?: UnitOptions): string => {
-    const map = this.toMap(options);
-    return Array.from(map.keys())
-      .map((key) => `${key}: ${map.get(key)}`)
-      .join('\n');
-  };
 };
 
 export class ScreenInfoWithDiagonal extends ScreenInfoBase {

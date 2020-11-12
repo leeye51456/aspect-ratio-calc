@@ -1,46 +1,17 @@
 import React, { useState } from 'react';
-import useScreenData, { ScreenFormData, StoredScreenFormProps } from '../../hooks/useScreenData';
+import useScreenData, { ScreenFormData } from '../../hooks/useScreenData';
 import copyToClipboard from '../../utils/copyToClipboard';
 import {
   AvailableUnit,
-  getScreenInfo,
-  ScreenInfo,
   toCentimeters,
   toInches,
   tryParsePositiveFloat,
-  UnitOptions,
 } from '../../utils/ScreenInfo';
+import { getWholeYaml } from '../../utils/yaml';
 import ScreenForm, { ScreenFormChangedProps } from '../forms/ScreenForm';
 import ToggleSwitch from '../forms/ToggleSwitch';
 import icons from '../common/icons';
 import './App.css';
-
-const buildScreenInfoYamlEntry = function buildScreenInfoYamlEntryOfArray(
-  screenInfo: ScreenInfo,
-  options: UnitOptions,
-): string {
-  const map = screenInfo.toMap(options);
-  return '- ' + Array.from(map.keys()).map((key) => `${key}: ${map.get(key)}`).join('\n  ');
-};
-
-const getWholeYaml = function getWholeYamlFromScreenFormData(
-  screenFormData: StoredScreenFormProps[],
-  options: UnitOptions = { diagonalUnit: 'in', sizeUnit: 'cm' },
-): string {
-  const screens: ScreenInfo[] = screenFormData.reduce<ScreenInfo[]>(
-    (acc: ScreenInfo[], props: StoredScreenFormProps) => {
-      const { width, height, diagonal }: StoredScreenFormProps = props;
-      const screenInfo: ScreenInfo | null = getScreenInfo(width, height, diagonal, options.diagonalUnit);
-      if (screenInfo !== null) {
-        acc.push(screenInfo);
-      }
-      return acc;
-    },
-    []
-  );
-  const yamls: string[] = screens.map((screen: ScreenInfo) => buildScreenInfoYamlEntry(screen, options));
-  return yamls.join('\n\n') + '\n';
-};
 
 const toFixedWithoutTrailingZero = function toFixedWithoutTrailingZero(value: number, length: number): string {
   const integerPart: number = Math.floor(value);

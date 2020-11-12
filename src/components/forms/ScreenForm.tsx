@@ -13,6 +13,7 @@ import {
   tryParsePositiveFloat,
 } from '../../utils/ScreenInfo';
 import { getAspectRatioString } from '../../utils/getAspectRatioString';
+import { getSingleYaml } from '../../utils/yaml';
 import icons from '../common/icons';
 import './ScreenForm.css';
 
@@ -132,7 +133,7 @@ function ScreenForm(props: ScreenFormProps) {
 
   const handleCopyClick = function copySelf() {
     if (screenInfo !== null) {
-      copyToClipboard(`${screenInfo.toYaml({ diagonalUnit, sizeUnit })}\n`);
+      copyToClipboard(`${getSingleYaml(screenInfo, { diagonalUnit, sizeUnit })}\n`);
     }
   }
 
