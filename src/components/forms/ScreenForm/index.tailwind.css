@@ -33,11 +33,6 @@
     @apply shadow-lg;
   }
 
-  .ScreenForm-bg {
-    @apply absolute;
-    @apply inset-0;
-  }
-
   .ScreenForm-grid {
     @apply absolute;
     @apply inset-0;

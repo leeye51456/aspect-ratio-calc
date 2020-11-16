@@ -28,6 +28,7 @@ function ScreenFormBg(props: ScreenFormBgProps) {
 
   return (
     <svg
+      className="ScreenFormBg"
       viewBox={`0 0 ${props.width} ${props.height}`}
       width="100%"
     >

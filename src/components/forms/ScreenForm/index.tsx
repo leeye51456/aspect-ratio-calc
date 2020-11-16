@@ -151,12 +151,10 @@ function ScreenForm(props: ScreenFormProps) {
         />
 
         <div className="ScreenForm-content">
-          <div className="ScreenForm-bg">
-            <ScreenFormBg
-              width={getFormWidth(renderedRatio)}
-              height={getFormHeight(renderedRatio)}
-            />
-          </div>
+          <ScreenFormBg
+            width={getFormWidth(renderedRatio)}
+            height={getFormHeight(renderedRatio)}
+          />
 
           <div className="ScreenForm-grid">
             <ul className="ScreenForm-grid-item ScreenForm-width">
