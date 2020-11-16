@@ -38,33 +38,6 @@
     @apply inset-0;
   }
 
-  .ScreenForm-misc {
-    @apply absolute;
-    @apply inset-0 bottom-auto;
-    @apply p-1;
-    @apply text-sm;
-  }
-
-  .ScreenForm-misc-pairs span {
-    @apply inline-block;
-  }
-
-  .ScreenForm-misc-pair {
-    @apply mb-px;
-  }
-
-  .ScreenForm-misc-key {
-    @apply rounded;
-    @apply mt-px ml-px;
-    @apply pl-1;
-    @apply bg-teal-300;
-    @apply text-teal-900;
-  }
-
-  .ScreenForm-misc-value {
-    @apply ml-1 mr-3;
-  }
-
   .ScreenForm-grid {
     @apply absolute;
     @apply inset-0;

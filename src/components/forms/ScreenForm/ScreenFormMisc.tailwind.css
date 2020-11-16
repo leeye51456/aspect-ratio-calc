@@ -1,0 +1,28 @@
+@layer components {
+  .ScreenFormMisc {
+    @apply absolute;
+    @apply inset-0 bottom-auto;
+    @apply p-1;
+    @apply text-sm;
+  }
+
+  .ScreenFormMisc-pairs span {
+    @apply inline-block;
+  }
+
+  .ScreenFormMisc-pair {
+    @apply mb-px;
+  }
+
+  .ScreenFormMisc-key {
+    @apply rounded;
+    @apply mt-px ml-px;
+    @apply pl-1;
+    @apply bg-teal-300;
+    @apply text-teal-900;
+  }
+
+  .ScreenFormMisc-value {
+    @apply ml-1 mr-3;
+  }
+}
