@@ -1,5 +1,5 @@
 import React from 'react';
-import './ScreenFormBg.css';
+import './index.css';
 
 interface ScreenFormBgProps {
   width: number,

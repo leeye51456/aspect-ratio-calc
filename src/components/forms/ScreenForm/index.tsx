@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 import { getContainerStyle, getFormHeight, getFormWidth, getRatioStyle } from './styleFunctions';
-import ScreenFormBg from '../ScreenFormBg';
+import ScreenFormBg from './ScreenFormBg';
 import copyToClipboard from '../../../utils/copyToClipboard';
 import { insertCommas, tryParsePositiveFloat } from '../../../utils/number';
 import {
