@@ -1,8 +1,8 @@
 import React, { useEffect, useRef } from 'react';
 import { getContainerStyle, getFormHeight, getFormWidth, getRatioStyle } from './styleFunctions';
-import ScreenFormBg from '../ScreenFormBg';
+import ScreenFormBg from './ScreenFormBg';
 import copyToClipboard from '../../../utils/copyToClipboard';
-import { insertCommas, tryParsePositiveFloat } from '../../../utils/number';
+import { tryParsePositiveFloat } from '../../../utils/number';
 import {
   AvailableUnit,
   getScreenInfo,
@@ -13,10 +13,10 @@ import {
   toCentimeters,
   toInches,
 } from '../../../utils/ScreenInfo';
-import { getAspectRatioString } from '../../../utils/getAspectRatioString';
 import { getSingleYaml } from '../../../utils/yaml';
 import icons from '../../common/icons';
 import './index.css';
+import ScreenFormMisc from './ScreenFormMisc';
 
 export type ScreenFormPropName = 'width' | 'height' | 'diagonal';
 
@@ -151,12 +151,10 @@ function ScreenForm(props: ScreenFormProps) {
         />
 
         <div className="ScreenForm-content">
-          <div className="ScreenForm-bg">
-            <ScreenFormBg
-              width={getFormWidth(renderedRatio)}
-              height={getFormHeight(renderedRatio)}
-            />
-          </div>
+          <ScreenFormBg
+            width={getFormWidth(renderedRatio)}
+            height={getFormHeight(renderedRatio)}
+          />
 
           <div className="ScreenForm-grid">
             <ul className="ScreenForm-grid-item ScreenForm-width">
@@ -212,49 +210,12 @@ function ScreenForm(props: ScreenFormProps) {
             </ul>
           </div>
 
-          <div className="ScreenForm-misc">
-            <ul className="ScreenForm-misc-info">
-              <li className="ScreenForm-misc-pairs">
-                <span className="ScreenForm-misc-pair">
-                  <span className="ScreenForm-misc-key">
-                    Aspect&nbsp;ratio&nbsp;
-                  </span>
-                  <span className="ScreenForm-misc-value">
-                    {ratio ? `${ratio.toFixed(2)}:1 (${getAspectRatioString(ratio)})` : '-'}
-                  </span>
-                </span>
-              </li>
-              <li className="ScreenForm-misc-pairs">
-                <span className="ScreenForm-misc-pair">
-                  <span className="ScreenForm-misc-key">
-                    DPI&nbsp;
-                  </span>
-                  <span className="ScreenForm-misc-value">
-                    {dpi ? dpi.toFixed(2) : '-'}
-                  </span>
-                </span>
-                {' '}
-                <span className="ScreenForm-misc-pair">
-                  <span className="ScreenForm-misc-key">
-                    Dot&nbsp;pitch&nbsp;
-                  </span>
-                  <span className="ScreenForm-misc-value">
-                    {dotPitch ? `${dotPitch.toFixed(4)}mm` : '-'}
-                  </span>
-                </span>
-              </li>
-              <li className="ScreenForm-misc-pairs">
-                <span className="ScreenForm-misc-pair">
-                  <span className="ScreenForm-misc-key">
-                    Pixel&nbsp;count&nbsp;
-                  </span>
-                  <span className="ScreenForm-misc-value">
-                    {totalPixels ? insertCommas(totalPixels) : '-'}
-                  </span>
-                </span>
-              </li>
-            </ul>
-          </div>
+          <ScreenFormMisc
+            ratio={ratio}
+            dpi={dpi}
+            dotPitch={dotPitch}
+            totalPixels={totalPixels}
+          />
         </div>
       </div>
     </div>

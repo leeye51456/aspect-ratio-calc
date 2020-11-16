@@ -1,4 +1,9 @@
 @layer components {
+  .ScreenFormBg {
+    @apply absolute;
+    @apply inset-0;
+  }
+
   .ScreenFormBg-svg-stroke {
     @apply stroke-current;
     @apply stroke-1;
