@@ -14,7 +14,7 @@
 importScripts("https://storage.googleapis.com/workbox-cdn/releases/4.3.1/workbox-sw.js");
 
 importScripts(
-  "/aspect-ratio-calc/precache-manifest.a551e2ed0ef1e734584358e30a0eb412.js"
+  "/aspect-ratio-calc/precache-manifest.0591a48c4ac158220cc904be1964bfba.js"
 );
 
 self.addEventListener('message', (event) => {
