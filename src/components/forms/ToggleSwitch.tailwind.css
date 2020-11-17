@@ -15,6 +15,7 @@
 
   .ToggleSwitch-checkbox {
     @apply w-0 h-0;
+    @apply opacity-0;
   }
 
   .ToggleSwitch-switch {
