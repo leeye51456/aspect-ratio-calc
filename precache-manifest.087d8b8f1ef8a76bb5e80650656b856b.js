@@ -1,11 +1,11 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "b25a1ac88353b010b42e604c3b83d381",
+    "revision": "8e7ed4e87455001640022b599b09e721",
     "url": "/aspect-ratio-calc/index.html"
   },
   {
-    "revision": "60d11e40a8ded72488b2",
-    "url": "/aspect-ratio-calc/static/css/main.1416693c.chunk.css"
+    "revision": "ec765e9640768b014baa",
+    "url": "/aspect-ratio-calc/static/css/main.1c2bfce5.chunk.css"
   },
   {
     "revision": "85f2936a0cfcfded9be7",
@@ -16,8 +16,8 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/aspect-ratio-calc/static/js/2.04f8c722.chunk.js.LICENSE.txt"
   },
   {
-    "revision": "60d11e40a8ded72488b2",
-    "url": "/aspect-ratio-calc/static/js/main.95106b05.chunk.js"
+    "revision": "ec765e9640768b014baa",
+    "url": "/aspect-ratio-calc/static/js/main.1d443ee0.chunk.js"
   },
   {
     "revision": "2b397558e14061fdde47",

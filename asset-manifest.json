@@ -1,16 +1,16 @@
 {
   "files": {
-    "main.css": "/aspect-ratio-calc/static/css/main.1416693c.chunk.css",
-    "main.js": "/aspect-ratio-calc/static/js/main.95106b05.chunk.js",
-    "main.js.map": "/aspect-ratio-calc/static/js/main.95106b05.chunk.js.map",
+    "main.css": "/aspect-ratio-calc/static/css/main.1c2bfce5.chunk.css",
+    "main.js": "/aspect-ratio-calc/static/js/main.1d443ee0.chunk.js",
+    "main.js.map": "/aspect-ratio-calc/static/js/main.1d443ee0.chunk.js.map",
     "runtime-main.js": "/aspect-ratio-calc/static/js/runtime-main.be6fada4.js",
     "runtime-main.js.map": "/aspect-ratio-calc/static/js/runtime-main.be6fada4.js.map",
     "static/js/2.04f8c722.chunk.js": "/aspect-ratio-calc/static/js/2.04f8c722.chunk.js",
     "static/js/2.04f8c722.chunk.js.map": "/aspect-ratio-calc/static/js/2.04f8c722.chunk.js.map",
     "index.html": "/aspect-ratio-calc/index.html",
-    "precache-manifest.0591a48c4ac158220cc904be1964bfba.js": "/aspect-ratio-calc/precache-manifest.0591a48c4ac158220cc904be1964bfba.js",
+    "precache-manifest.087d8b8f1ef8a76bb5e80650656b856b.js": "/aspect-ratio-calc/precache-manifest.087d8b8f1ef8a76bb5e80650656b856b.js",
     "service-worker.js": "/aspect-ratio-calc/service-worker.js",
-    "static/css/main.1416693c.chunk.css.map": "/aspect-ratio-calc/static/css/main.1416693c.chunk.css.map",
+    "static/css/main.1c2bfce5.chunk.css.map": "/aspect-ratio-calc/static/css/main.1c2bfce5.chunk.css.map",
     "static/js/2.04f8c722.chunk.js.LICENSE.txt": "/aspect-ratio-calc/static/js/2.04f8c722.chunk.js.LICENSE.txt",
     "static/media/add.svg": "/aspect-ratio-calc/static/media/add.0e3e08bc.svg",
     "static/media/copy.svg": "/aspect-ratio-calc/static/media/copy.72dd793a.svg",
@@ -20,7 +20,7 @@
   "entrypoints": [
     "static/js/runtime-main.be6fada4.js",
     "static/js/2.04f8c722.chunk.js",
-    "static/css/main.1416693c.chunk.css",
-    "static/js/main.95106b05.chunk.js"
+    "static/css/main.1c2bfce5.chunk.css",
+    "static/js/main.1d443ee0.chunk.js"
   ]
 }
