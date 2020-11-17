@@ -19,11 +19,12 @@ function App() {
   };
 
   const handleAddClick = function handleAddNewScreenFormClick(): void {
+    const { devicePixelRatio = 1, screen: { width, height } }: Window = window;
     screenData.add({
       diagonalUnit,
       sizeUnit,
-      width: '',
-      height: '',
+      width: (width * devicePixelRatio).toString(),
+      height: (height * devicePixelRatio).toString(),
       diagonal: '',
     });
   };
