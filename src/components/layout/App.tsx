@@ -2,11 +2,7 @@ import React, { useState } from 'react';
 import useScreenData, { ScreenFormData } from '../../hooks/useScreenData';
 import copyToClipboard from '../../utils/copyToClipboard';
 import { toFixedWithoutTrailingZero, tryParsePositiveFloat } from '../../utils/number';
-import {
-  AvailableUnit,
-  toCentimeters,
-  toInches,
-} from '../../utils/ScreenInfo';
+import { AvailableUnit, toCentimeters, toInches } from '../../utils/ScreenInfo';
 import { getWholeYaml } from '../../utils/yaml';
 import ScreenForm, { ScreenFormChangedProps } from '../forms/ScreenForm';
 import ToggleSwitch from '../forms/ToggleSwitch';
@@ -23,11 +19,12 @@ function App() {
   };
 
   const handleAddClick = function handleAddNewScreenFormClick(): void {
+    const { devicePixelRatio = 1, screen: { width, height } }: Window = window;
     screenData.add({
       diagonalUnit,
       sizeUnit,
-      width: '',
-      height: '',
+      width: (width * devicePixelRatio).toString(),
+      height: (height * devicePixelRatio).toString(),
       diagonal: '',
     });
   };
