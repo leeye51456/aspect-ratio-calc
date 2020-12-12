@@ -14,11 +14,7 @@ function App() {
   const [ diagonalUnit, setDiagonalUnit ] = useState<AvailableUnit>('in');
   const [ sizeUnit, setSizeUnit ] = useState<AvailableUnit>('cm');
 
-  const handleCopyClick = function handleCopyAsYamlClick(): void {
-    copyToClipboard(getWholeYaml(screenData.idOrder.map((id) => screenData.data[id]), { diagonalUnit, sizeUnit }));
-  };
-
-  const handleAddClick = function handleAddNewScreenFormClick(): void {
+  const addDefaultScreen = function addDefaultScreenToScreenData(): void {
     const { devicePixelRatio = 1, screen: { width, height } }: Window = window;
     screenData.add({
       diagonalUnit,
@@ -27,6 +23,14 @@ function App() {
       height: (height * devicePixelRatio).toString(),
       diagonal: '',
     });
+  }
+
+  const handleCopyClick = function handleCopyAsYamlClick(): void {
+    copyToClipboard(getWholeYaml(screenData.idOrder.map((id) => screenData.data[id]), { diagonalUnit, sizeUnit }));
+  };
+
+  const handleAddClick = function handleAddNewScreenFormClick(): void {
+    addDefaultScreen();
   };
 
   const handleScreenFormChange = function handleScreenFormChangeById(
@@ -90,7 +94,7 @@ function App() {
     />
   ));
 
-  useEffect(handleAddClick, []);
+  useEffect(addDefaultScreen, []);
 
   return (
     <div className="App" data-testid="App">
