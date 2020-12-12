@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import useScreenData, { ScreenFormData } from '../../hooks/useScreenData';
 import copyToClipboard from '../../utils/copyToClipboard';
 import { toFixedWithoutTrailingZero, tryParsePositiveFloat } from '../../utils/number';
@@ -89,6 +89,8 @@ function App() {
       onRemove={handleScreenFormRemove}
     />
   ));
+
+  useEffect(handleAddClick, []);
 
   return (
     <div className="App" data-testid="App">
