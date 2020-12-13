@@ -94,8 +94,6 @@ function App() {
     />
   ));
 
-  useEffect(addDefaultScreen, []);
-
   return (
     <div className="App" data-testid="App">
       <header className="App-header">

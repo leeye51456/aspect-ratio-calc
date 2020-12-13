@@ -30,10 +30,31 @@ export interface ScreenFormData {
   [id: number]: StoredScreenFormProps,
 };
 
+const defaults: { data: ScreenFormData, idOrder: number[], nextId: number } = (function getDefaults() {
+  const { devicePixelRatio = 1, screen: { width, height } }: Window = window;
+
+  const data: ScreenFormData = {
+    0: {
+      id: 0,
+      width: (width * devicePixelRatio).toString(),
+      height: (height * devicePixelRatio).toString(),
+      diagonal: '',
+      diagonalUnit: 'in',
+      sizeUnit: 'cm',
+    },
+  };
+
+  return {
+    data,
+    idOrder: [0],
+    nextId: 1,
+  };
+})();
+
 function useScreenData() {
-  const [ data, setData ] = useState<ScreenFormData>({});
-  const [ idOrder, setIdOrder ] = useState<number[]>([]);
-  const [ nextId, setNextId ] = useState<number>(0);
+  const [ data, setData ] = useState<ScreenFormData>(defaults.data);
+  const [ idOrder, setIdOrder ] = useState<number[]>(defaults.idOrder);
+  const [ nextId, setNextId ] = useState<number>(defaults.nextId);
 
   const add = function addScreen(screenFormProps: NewScreenFormProps): void {
     const id = nextId;
