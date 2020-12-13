@@ -126,21 +126,21 @@ function ScreenForm(props: ScreenFormProps) {
           type="button"
           onClick={handleRotateClick}
         >
-          <img src={icons.rotate} alt="Rotate" />
+          <img src={icons.rotate} alt="Rotate" width={24} height={24} />
         </button>
         <button
           className="ScreenForm-function-button"
           type="button"
           onClick={handleCopyClick}
         >
-          <img src={icons.copy} alt="Copy" />
+          <img src={icons.copy} alt="Copy" width={24} height={24} />
         </button>
         <button
           className="ScreenForm-function-button-negative"
           type="button"
           onClick={handleRemoveClick}
         >
-          <img src={icons.remove} alt="Remove" />
+          <img src={icons.remove} alt="Remove" width={24} height={24} />
         </button>
       </div>
 
