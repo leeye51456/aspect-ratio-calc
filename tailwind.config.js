@@ -2,7 +2,16 @@ const contentWidth = 360;
 const contentGap = 20;
 
 module.exports = {
-  purge: [],
+  purge: {
+    enabled: true,
+    mode: 'all',
+    content: [
+      './public/index.html',
+      './src/**/tailwind.css',
+      './src/**/*.tailwind.css',
+      './src/**/*.tsx',
+    ],
+  },
   theme: {
     screens: {
       'sm': `${contentWidth + contentGap * 2}px`,
