@@ -11,6 +11,7 @@ import './App.css';
 
 function App() {
   const screenData = useScreenData();
+  // TODO - Move unit hooks to `useScreenData` hook.
   const [ diagonalUnit, setDiagonalUnit ] = useState<AvailableUnit>('in');
   const [ sizeUnit, setSizeUnit ] = useState<AvailableUnit>('cm');
 
@@ -45,6 +46,7 @@ function App() {
   };
 
   const handleDiagonalUnitChange = function handleDiagonalUnitToggleChange(checked: boolean): void {
+    // TODO - Move unit conversion to `useScreenData` hook.
     const nextUnit: AvailableUnit = checked ? 'in' : 'cm';
     setDiagonalUnit(nextUnit);
 
@@ -71,6 +73,7 @@ function App() {
   };
 
   const handleSizeUnitChange = function handleSizeUnitToggleChange(checked: boolean): void {
+    // TODO - Move unit conversion to `useScreenData` hook.
     const nextUnit: AvailableUnit = checked ? 'in' : 'cm';
     setSizeUnit(nextUnit);
 

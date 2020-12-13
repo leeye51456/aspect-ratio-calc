@@ -51,6 +51,7 @@ const defaults: { data: ScreenFormData, idOrder: number[], nextId: number } = (f
   };
 })();
 
+// TODO - Move unit hooks and unit conversion here.
 function useScreenData() {
   const [ data, setData ] = useState<ScreenFormData>(defaults.data);
   const [ idOrder, setIdOrder ] = useState<number[]>(defaults.idOrder);
@@ -94,6 +95,7 @@ function useScreenData() {
     setData(nextData);
   };
 
+  // TODO - Remove this function after moving unit hooks and unit conversion here.
   const replace = function replaceData(newData: ScreenFormData): void {
     if (Object.keys(newData).length === Object.keys(data).length) {
       setData(newData);
