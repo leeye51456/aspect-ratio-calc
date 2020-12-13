@@ -108,7 +108,7 @@ function App() {
             type="button"
             onClick={handleCopyClick}
           >
-            <img src={icons.copy} alt="Copy all" />
+            <img src={icons.copy} alt="Copy all" width={24} height={24} />
           </button>
         </div>
       </header>
@@ -123,7 +123,7 @@ function App() {
             type="button"
             onClick={handleAddClick}
           >
-            <img src={icons.add} alt="Add" />
+            <img src={icons.add} alt="Add" width={24} height={24} />
           </button>
         </div>
       </main>
