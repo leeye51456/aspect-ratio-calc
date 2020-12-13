@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import useScreenData, { ScreenFormData } from '../../hooks/useScreenData';
 import copyToClipboard from '../../utils/copyToClipboard';
 import { toFixedWithoutTrailingZero, tryParsePositiveFloat } from '../../utils/number';
