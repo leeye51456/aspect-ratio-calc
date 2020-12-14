@@ -1,5 +1,6 @@
 import { useState } from 'react';
-import { AvailableUnit } from '../utils/ScreenInfo';
+import { toFixedWithoutTrailingZero, tryParsePositiveFloat } from '../utils/number';
+import { AvailableUnit, toCentimeters, toInches } from '../utils/ScreenInfo';
 
 export interface StoredScreenFormProps {
   readonly id: number,
@@ -14,16 +15,12 @@ export interface NewScreenFormProps {
   readonly width?: string,
   readonly height?: string,
   readonly diagonal?: string,
-  readonly diagonalUnit: AvailableUnit,
-  readonly sizeUnit: AvailableUnit,
 };
 
 export interface UpdatedScreenFormProps {
   readonly width?: string,
   readonly height?: string,
   readonly diagonal?: string,
-  readonly diagonalUnit?: AvailableUnit,
-  readonly sizeUnit?: AvailableUnit,
 };
 
 export interface ScreenFormData {
@@ -51,11 +48,13 @@ const defaults: { data: ScreenFormData, idOrder: number[], nextId: number } = (f
   };
 })();
 
-// TODO - Move unit hooks and unit conversion here.
 function useScreenData() {
   const [ data, setData ] = useState<ScreenFormData>(defaults.data);
   const [ idOrder, setIdOrder ] = useState<number[]>(defaults.idOrder);
   const [ nextId, setNextId ] = useState<number>(defaults.nextId);
+
+  const [ diagonalUnit, setDiagonalUnit ] = useState<AvailableUnit>('in');
+  const [ sizeUnit, setSizeUnit ] = useState<AvailableUnit>('cm');
 
   const add = function addScreen(screenFormProps: NewScreenFormProps): void {
     const id = nextId;
@@ -63,6 +62,8 @@ function useScreenData() {
 
     const newScreenFormProps: StoredScreenFormProps = {
       id,
+      diagonalUnit,
+      sizeUnit,
       width: '',
       height: '',
       diagonal: '',
@@ -95,13 +96,6 @@ function useScreenData() {
     setData(nextData);
   };
 
-  // TODO - Remove this function after moving unit hooks and unit conversion here.
-  const replace = function replaceData(newData: ScreenFormData): void {
-    if (Object.keys(newData).length === Object.keys(data).length) {
-      setData(newData);
-    }
-  };
-
   const remove = function removeScreenById(id: number): void {
     const nextData: ScreenFormData = { ...data };
     delete nextData[id];
@@ -111,13 +105,67 @@ function useScreenData() {
     setIdOrder(nextIdOrder);
   };
 
+  const changeDiagonalUnit = function changeDiagonalUnitTo(nextUnit: AvailableUnit): void {
+    const nextScreenData: ScreenFormData = {};
+
+    for (const id of idOrder) {
+      const parsedDiagonal: number | null = tryParsePositiveFloat(data[id]?.diagonal);
+      if (typeof parsedDiagonal === 'number') {
+        nextScreenData[id] = {
+          ...data[id],
+          diagonal: nextUnit === 'in'
+            ? toFixedWithoutTrailingZero(toInches(parsedDiagonal), 6)
+            : toFixedWithoutTrailingZero(toCentimeters(parsedDiagonal), 6),
+          diagonalUnit: nextUnit,
+        };
+      } else {
+        nextScreenData[id] = {
+          ...data[id],
+          diagonalUnit: nextUnit,
+        };
+      }
+    }
+
+    setData(nextScreenData);
+    setDiagonalUnit(nextUnit);
+  };
+
+  const changeSizeUnit = function changeSizeUnitTo(nextUnit: AvailableUnit): void {
+    const nextScreenData: ScreenFormData = {};
+
+    for (const id of idOrder) {
+      nextScreenData[id] = {
+        ...data[id],
+        sizeUnit: nextUnit,
+      };
+    }
+
+    setData(nextScreenData);
+    setSizeUnit(nextUnit);
+  };
+
+  const changeUnits = function changeUnitsTo(
+    { diagonal, size }: { diagonal?: AvailableUnit, size?: AvailableUnit }
+  ): void {
+    if (diagonal && diagonal !== diagonalUnit) {
+      changeDiagonalUnit(diagonal);
+    }
+    if (size && size !== sizeUnit) {
+      changeSizeUnit(size);
+    }
+  };
+
   return {
     data,
     idOrder,
     add,
     update,
-    replace,
     remove,
+    units: {
+      diagonal: diagonalUnit,
+      size: sizeUnit,
+      change: changeUnits,
+    },
   };
 }
 

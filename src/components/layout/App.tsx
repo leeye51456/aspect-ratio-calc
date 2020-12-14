@@ -1,8 +1,7 @@
-import React, { useState } from 'react';
-import useScreenData, { ScreenFormData } from '../../hooks/useScreenData';
+import React from 'react';
+import useScreenData from '../../hooks/useScreenData';
 import copyToClipboard from '../../utils/copyToClipboard';
-import { toFixedWithoutTrailingZero, tryParsePositiveFloat } from '../../utils/number';
-import { AvailableUnit, toCentimeters, toInches } from '../../utils/ScreenInfo';
+import { AvailableUnit } from '../../utils/ScreenInfo';
 import { getWholeYaml } from '../../utils/yaml';
 import ScreenForm, { ScreenFormChangedProps } from '../forms/ScreenForm';
 import ToggleSwitch from '../forms/ToggleSwitch';
@@ -11,15 +10,10 @@ import './App.css';
 
 function App() {
   const screenData = useScreenData();
-  // TODO - Move unit hooks to `useScreenData` hook.
-  const [ diagonalUnit, setDiagonalUnit ] = useState<AvailableUnit>('in');
-  const [ sizeUnit, setSizeUnit ] = useState<AvailableUnit>('cm');
 
   const addDefaultScreen = function addDefaultScreenToScreenData(): void {
     const { devicePixelRatio = 1, screen: { width, height } }: Window = window;
     screenData.add({
-      diagonalUnit,
-      sizeUnit,
       width: (width * devicePixelRatio).toString(),
       height: (height * devicePixelRatio).toString(),
       diagonal: '',
@@ -27,7 +21,8 @@ function App() {
   }
 
   const handleCopyClick = function handleCopyAsYamlClick(): void {
-    copyToClipboard(getWholeYaml(screenData.idOrder.map((id) => screenData.data[id]), { diagonalUnit, sizeUnit }));
+    const { data, idOrder, units: { diagonal: diagonalUnit, size: sizeUnit } } = screenData;
+    copyToClipboard(getWholeYaml(idOrder.map((id) => data[id]), { diagonalUnit, sizeUnit }));
   };
 
   const handleAddClick = function handleAddNewScreenFormClick(): void {
@@ -46,46 +41,13 @@ function App() {
   };
 
   const handleDiagonalUnitChange = function handleDiagonalUnitToggleChange(checked: boolean): void {
-    // TODO - Move unit conversion to `useScreenData` hook.
     const nextUnit: AvailableUnit = checked ? 'in' : 'cm';
-    setDiagonalUnit(nextUnit);
-
-    const nextScreenData: ScreenFormData = {};
-
-    for (const id of screenData.idOrder) {
-      const parsedDiagonal: number | null = tryParsePositiveFloat(screenData.data[id]?.diagonal);
-      if (typeof parsedDiagonal === 'number') {
-        nextScreenData[id] = {
-          ...screenData.data[id],
-          diagonal: nextUnit === 'in'
-            ? toFixedWithoutTrailingZero(toInches(parsedDiagonal), 6)
-            : toFixedWithoutTrailingZero(toCentimeters(parsedDiagonal), 6),
-          diagonalUnit: nextUnit,
-        };
-      } else {
-        nextScreenData[id] = {
-          ...screenData.data[id],
-          diagonalUnit: nextUnit,
-        };
-      }
-    }
-    screenData.replace(nextScreenData);
+    screenData.units.change({ diagonal: nextUnit });
   };
 
   const handleSizeUnitChange = function handleSizeUnitToggleChange(checked: boolean): void {
-    // TODO - Move unit conversion to `useScreenData` hook.
     const nextUnit: AvailableUnit = checked ? 'in' : 'cm';
-    setSizeUnit(nextUnit);
-
-    const nextScreenData: ScreenFormData = {};
-
-    for (const id of screenData.idOrder) {
-      nextScreenData[id] = {
-        ...screenData.data[id],
-        sizeUnit: nextUnit,
-      };
-    }
-    screenData.replace(nextScreenData);
+    screenData.units.change({ size: nextUnit });
   };
 
   const screenForms = screenData.idOrder.map((id) => (
@@ -142,7 +104,7 @@ function App() {
               <ToggleSwitch
                 checkedSideLabel="in"
                 uncheckedSideLabel="cm"
-                checked={sizeUnit === 'in'}
+                checked={screenData.units.size === 'in'}
                 onChange={handleSizeUnitChange}
               />
             </span>
@@ -155,7 +117,7 @@ function App() {
               <ToggleSwitch
                 checkedSideLabel="in"
                 uncheckedSideLabel="cm"
-                checked={diagonalUnit === 'in'}
+                checked={screenData.units.diagonal === 'in'}
                 onChange={handleDiagonalUnitChange}
               />
             </span>
