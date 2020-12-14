@@ -53,6 +53,8 @@ function App() {
   const screenForms = screenData.idOrder.map((id) => (
     <ScreenForm
       { ...screenData.data[id] }
+      diagonalUnit={screenData.units.diagonal}
+      sizeUnit={screenData.units.size}
       key={id}
       onChange={handleScreenFormChange}
       onRemove={handleScreenFormRemove}

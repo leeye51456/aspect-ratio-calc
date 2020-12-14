@@ -7,8 +7,6 @@ export interface StoredScreenFormProps {
   readonly width: string,
   readonly height: string,
   readonly diagonal: string,
-  readonly diagonalUnit: AvailableUnit,
-  readonly sizeUnit: AvailableUnit,
 };
 
 export interface NewScreenFormProps {
@@ -36,8 +34,6 @@ const defaults: { data: ScreenFormData, idOrder: number[], nextId: number } = (f
       width: (width * devicePixelRatio).toString(),
       height: (height * devicePixelRatio).toString(),
       diagonal: '',
-      diagonalUnit: 'in',
-      sizeUnit: 'cm',
     },
   };
 
@@ -62,8 +58,6 @@ function useScreenData() {
 
     const newScreenFormProps: StoredScreenFormProps = {
       id,
-      diagonalUnit,
-      sizeUnit,
       width: '',
       height: '',
       diagonal: '',
@@ -116,32 +110,14 @@ function useScreenData() {
           diagonal: nextUnit === 'in'
             ? toFixedWithoutTrailingZero(toInches(parsedDiagonal), 6)
             : toFixedWithoutTrailingZero(toCentimeters(parsedDiagonal), 6),
-          diagonalUnit: nextUnit,
         };
       } else {
-        nextScreenData[id] = {
-          ...data[id],
-          diagonalUnit: nextUnit,
-        };
+        nextScreenData[id] = data[id];
       }
     }
 
     setData(nextScreenData);
     setDiagonalUnit(nextUnit);
-  };
-
-  const changeSizeUnit = function changeSizeUnitTo(nextUnit: AvailableUnit): void {
-    const nextScreenData: ScreenFormData = {};
-
-    for (const id of idOrder) {
-      nextScreenData[id] = {
-        ...data[id],
-        sizeUnit: nextUnit,
-      };
-    }
-
-    setData(nextScreenData);
-    setSizeUnit(nextUnit);
   };
 
   const changeUnits = function changeUnitsTo(
@@ -151,7 +127,7 @@ function useScreenData() {
       changeDiagonalUnit(diagonal);
     }
     if (size && size !== sizeUnit) {
-      changeSizeUnit(size);
+      setSizeUnit(size);
     }
   };
 
