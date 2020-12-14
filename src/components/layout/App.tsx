@@ -1,5 +1,5 @@
 import React from 'react';
-import useScreenData from '../../hooks/useScreenData';
+import useScreenData, { NewScreenFormProps } from '../../hooks/useScreenData';
 import copyToClipboard from '../../utils/copyToClipboard';
 import { AvailableUnit } from '../../utils/ScreenInfo';
 import { getWholeYaml } from '../../utils/yaml';
@@ -8,17 +8,17 @@ import ToggleSwitch from '../forms/ToggleSwitch';
 import icons from '../common/icons';
 import './App.css';
 
+const getDefaultScreen = function getDefaultScreenData(): NewScreenFormProps {
+  const { devicePixelRatio = 1, screen: { width, height } }: Window = window;
+  return {
+    width: (width * devicePixelRatio).toString(),
+    height: (height * devicePixelRatio).toString(),
+    diagonal: '',
+  };
+}
+
 function App() {
   const screenData = useScreenData();
-
-  const addDefaultScreen = function addDefaultScreenToScreenData(): void {
-    const { devicePixelRatio = 1, screen: { width, height } }: Window = window;
-    screenData.add({
-      width: (width * devicePixelRatio).toString(),
-      height: (height * devicePixelRatio).toString(),
-      diagonal: '',
-    });
-  }
 
   const handleCopyClick = function handleCopyAsYamlClick(): void {
     const { data, idOrder, units: { diagonal: diagonalUnit, size: sizeUnit } } = screenData;
@@ -26,7 +26,7 @@ function App() {
   };
 
   const handleAddClick = function handleAddNewScreenFormClick(): void {
-    addDefaultScreen();
+    screenData.add(getDefaultScreen());
   };
 
   const handleScreenFormChange = function handleScreenFormChangeById(
