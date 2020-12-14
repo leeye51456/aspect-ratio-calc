@@ -44,6 +44,12 @@ const defaults: { data: ScreenFormData, idOrder: number[], nextId: number } = (f
   };
 })();
 
+const getConvertedTo = function getConvertedToUnit(value: number, nextUnit: AvailableUnit): string {
+  return nextUnit === 'in'
+    ? toFixedWithoutTrailingZero(toInches(value), 6)
+    : toFixedWithoutTrailingZero(toCentimeters(value), 6)
+};
+
 function useScreenData() {
   const [ data, setData ] = useState<ScreenFormData>(defaults.data);
   const [ idOrder, setIdOrder ] = useState<number[]>(defaults.idOrder);
@@ -107,9 +113,7 @@ function useScreenData() {
       if (typeof parsedDiagonal === 'number') {
         nextScreenData[id] = {
           ...data[id],
-          diagonal: nextUnit === 'in'
-            ? toFixedWithoutTrailingZero(toInches(parsedDiagonal), 6)
-            : toFixedWithoutTrailingZero(toCentimeters(parsedDiagonal), 6),
+          diagonal: getConvertedTo(parsedDiagonal, nextUnit),
         };
       } else {
         nextScreenData[id] = data[id];
